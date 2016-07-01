@@ -12,9 +12,36 @@ var jsonifier = (function() {
 		return version;
 	}
 
-	function xmlToJSON() {
-		console.log('hey, do some stuff');
+	function xmlToJSON(xmlString) {
+		var tokens = tokenizeXML(xmlString);
+		console.log(tokens);
 		return "";
+	}
+
+	function tokenizeXML(xmlString) {
+		var tokens = [];
+		var tmpToken = '';
+		var chars = xmlString.split('');
+		
+		for (var c = 0; c < chars.length; c++) {
+			if ('' !== tmpToken && '<' === chars[c])
+			{
+				tokens.push(tmpToken);
+				tmpToken = '';
+			}
+
+			if ('>' !== chars[c]) {
+				tmpToken += chars[c];
+			}
+			
+			if ('>' === chars[c]) {
+				tmpToken += chars[c];
+				tokens.push(tmpToken);
+				tmpToken = '';
+			}
+		}
+
+		return tokens;
 	}
 
 	
