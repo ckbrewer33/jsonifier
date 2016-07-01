@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>jsTesting</title>
+	<link rel="stylesheet" type="text/css" href="styles.css"/>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+</head>
+<body ng-app="testApp">
+
+	<div ng-controller="testController" class="stuff">
+		<div class="lineOfStuff">
+			<strong>obj:</strong> {{thing}}
+		</div>
+		<div class="lineOfStuff">
+			<strong>path:</strong>  {{path}}
+		</div>
+		<div class="lineOfStuff">
+			<strong>value found:</strong> {{value}}
+		</div>
+	</div>
+
+	<script src="../src/jsonifier.js"></script>
+	<script src="scripts.js"></script>
+</body>
+</html>
