@@ -1,6 +1,6 @@
 var jsonifier = (function() {
 	var version = "0.1";
-	var currScope = [];
+	var xmlScope = [];
 	var json = {};
 	
 	var apiMethods = {
@@ -30,7 +30,7 @@ var jsonifier = (function() {
 		var i = 0;
 
 		// reset scope for this parsing run
-		currScope = [];
+		xmlScope = [];
 		scopeDown(tokens[0]);
 
 		// Reset the json output object for this parsing run
@@ -67,18 +67,18 @@ var jsonifier = (function() {
 		var i = 0;
 		
 		// If at the root scope, just add the tag object
-		if (currScope.length === 1) {
+		if (xmlScope.length === 1) {
 			json[getScope()][getTagName(token)] = tagObject;
 		}
 		// else {
 		// 	// Navigate to the appropriate scope level in the object to add this new tag data
-		// 	for (i = 0; i < currScope.length-1; i++) {
-		// 		if (i === currScope.length-1) {
-		// 			json[currScope[i]] = tagObject
+		// 	for (i = 0; i < xmlScope.length-1; i++) {
+		// 		if (i === xmlScope.length-1) {
+		// 			json[xmlScope[i]] = tagObject
 		// 			break;
 		// 		}
 				
-		// 		tmp = json[currScope[i]];
+		// 		tmp = json[xmlScope[i]];
 		// 	}
 		// }
 	}
@@ -221,15 +221,15 @@ var jsonifier = (function() {
 	}
 
 	function scopeDown(tag) {
-		currScope.push(getTagName(tag));
+		xmlScope.push(getTagName(tag));
 	}
 
 	function scopeUp() {
-		currScope.pop();
+		xmlScope.pop();
 	}
 
 	function getScope() {
-		return currScope[currScope.length-1];
+		return xmlScope[xmlScope.length-1];
 	}
 	
 }).call({});
