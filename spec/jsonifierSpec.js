@@ -220,138 +220,278 @@ describe('jsonifier', function() {
       
       expect(jsonifier.validateXML(test)).toEqual(true);
     });
+    it('should NOT yell at you when using empty tags', function() {
+        var test = '<root>' +
+                      '<child1 attr1="attrVal1" attr2="attrVal2"></child1>' +
+                    '</root>';
+       expect(jsonifier.validateXML(test)).toEqual(true);           
+    });
   });
 
   describe('xmlToJSON', function() {
-    it ('should parse build object tree with one child', function() {
-        var test = '<root>' +
-                      '<child1>' +
-                      '</child1>' +
-                    '</root>';
-        var expected = {
-          'root': {
-            'child1': {}
-          }
-        };
-        expect(jsonifier.xmlToJSON(test)).toEqual(expected);
-    });
-
-    it ('should parse build object tree with multiple children on the root node', function() {
-        var test = '<root>' +
-                      '<child1></child1>' +
-                      '<child2></child2>' +
-                      '<child3></child2>' +
-                      '<child4></child2>' +
-                    '</root>';
-        var expected = {
-          'root': {
-            'child1': {},
-            'child2': {},
-            'child3': {},
-            'child4': {}
-          }
-        };
-        expect(jsonifier.xmlToJSON(test)).toEqual(expected);
-    });
-    it ('should parse build object tree with one child and one grandchild', function() {
-        var test = '<root>' +
-                      '<child1>' +
-                        '<grandchild1></grandchild1>' +
-                      '</child1>' +
-                    '</root>';
-        var expected = {
-          'root': {
-            'child1': {
-              'grandchild1': {}
+    describe('xml with no attributes and no values', function() {
+      it ('should build object with one child', function() {
+          var test = '<root>' +
+                        '<child1>' +
+                        '</child1>' +
+                      '</root>';
+          var expected = {
+            'root': {
+              'child1': {}
             }
-          }
-        };
-        expect(jsonifier.xmlToJSON(test)).toEqual(expected);
-    });
-    it ('should parse build object tree with one child and multiple grandchildren', function() {
-        var test = '<root>' +
-                      '<child1>' +
-                        '<grandchild1></grandchild1>' +
-                        '<grandchild2></grandchild2>' +
-                      '</child1>' +
-                    '</root>';
-        var expected = {
-          'root': {
-            'child1': {
-              'grandchild1': {},
-              'grandchild2': {}
+          };
+          expect(jsonifier.xmlToJSON(test)).toEqual(expected);
+      });
+      it ('should build object with one child empty tag', function() {
+          var test = '<root>' +
+                        '<child1/>' +
+                      '</root>';
+          var expected = {
+            'root': {
+              'child1': {}
             }
-          }
-        };
-        expect(jsonifier.xmlToJSON(test)).toEqual(expected);
-    });
-    it ('should parse build object tree with multiple children and grandchildren', function() {
-        var test = '<root>' +
-                      '<child1>' +
-                        '<grandchild1></grandchild1>' +
-                        '<grandchild2></grandchild2>' +
-                      '</child1>' +
-                      '<child2>' +
-                        '<grandchild1></grandchild1>' +
-                        '<grandchild2></grandchild2>' +
-                      '</child2>' +
-                    '</root>';
-        var expected = {
-          'root': {
-            'child1': {
-              'grandchild1': {},
-              'grandchild2': {}
-            },
-            'child2': {
-              'grandchild1': {},
-              'grandchild2': {}
+          };
+          expect(jsonifier.xmlToJSON(test)).toEqual(expected);
+      });
+      it ('should build object with multiple children on the root node', function() {
+          var test = '<root>' +
+                        '<child1></child1>' +
+                        '<child2></child2>' +
+                        '<child3></child3>' +
+                        '<child4></child4>' +
+                      '</root>';
+          var expected = {
+            'root': {
+              'child1': {},
+              'child2': {},
+              'child3': {},
+              'child4': {}
             }
-          }
-        };
-        expect(jsonifier.xmlToJSON(test)).toEqual(expected);
-    });
-    it ('should parse build object tree with one child, one grandchild, and one great grandchild', function() {
-        var test = '<root>' +
-                      '<child1>' +
-                        '<grandchild1>' +
-                          '<greatGrandchild1></greatGrandchild1>' +
-                        '</grandchild1>' +
-                      '</child1>' +
-                    '</root>';
-        var expected = {
-          'root': {
-            'child1': {
-              'grandchild1': {
-                'greatGrandchild1': {}
+          };
+          expect(jsonifier.xmlToJSON(test)).toEqual(expected);
+      });
+      it ('should build object with multiple empty tag children on the root node', function() {
+          var test = '<root>' +
+                        '<child1/>' +
+                        '<child2/>' +
+                        '<child3/>' +
+                        '<child4/>' +
+                      '</root>';
+          var expected = {
+            'root': {
+              'child1': {},
+              'child2': {},
+              'child3': {},
+              'child4': {}
+            }
+          };
+          expect(jsonifier.xmlToJSON(test)).toEqual(expected);
+      });
+      it ('should build object with one child and one grandchild', function() {
+          var test = '<root>' +
+                        '<child1>' +
+                          '<grandchild1></grandchild1>' +
+                        '</child1>' +
+                      '</root>';
+          var expected = {
+            'root': {
+              'child1': {
+                'grandchild1': {}
               }
             }
-          }
-        };
-        expect(jsonifier.xmlToJSON(test)).toEqual(expected);
-    });
-    it ('should parse build object tree with one child, one grandchild, and one great great grandchild', function() {
-        var test = '<root>' +
-                      '<child1>' +
-                        '<grandchild1>' +
-                          '<greatGrandchild1>' +
-                            '<greatGreatGrandchild1></greatGreatGrandchild1>' +
-                          '</greatGrandchild1>' +
-                        '</grandchild1>' +
-                      '</child1>' +
-                    '</root>';
-        var expected = {
-          'root': {
-            'child1': {
-              'grandchild1': {
-                'greatGrandchild1': {
-                  'greatGreatGrandchild1': {}
+          };
+          expect(jsonifier.xmlToJSON(test)).toEqual(expected);
+      });
+      it ('should build object with one child and multiple grandchildren', function() {
+          var test = '<root>' +
+                        '<child1>' +
+                          '<grandchild1></grandchild1>' +
+                          '<grandchild2></grandchild2>' +
+                        '</child1>' +
+                      '</root>';
+          var expected = {
+            'root': {
+              'child1': {
+                'grandchild1': {},
+                'grandchild2': {}
+              }
+            }
+          };
+          expect(jsonifier.xmlToJSON(test)).toEqual(expected);
+      });
+      it ('should build object with multiple children and grandchildren', function() {
+          var test = '<root>' +
+                        '<child1>' +
+                          '<grandchild1></grandchild1>' +
+                          '<grandchild2></grandchild2>' +
+                        '</child1>' +
+                        '<child2>' +
+                          '<grandchild1></grandchild1>' +
+                          '<grandchild2></grandchild2>' +
+                        '</child2>' +
+                      '</root>';
+          var expected = {
+            'root': {
+              'child1': {
+                'grandchild1': {},
+                'grandchild2': {}
+              },
+              'child2': {
+                'grandchild1': {},
+                'grandchild2': {}
+              }
+            }
+          };
+          expect(jsonifier.xmlToJSON(test)).toEqual(expected);
+      });
+      it ('should build object with one child, one grandchild, and one great grandchild', function() {
+          var test = '<root>' +
+                        '<child1>' +
+                          '<grandchild1>' +
+                            '<greatGrandchild1></greatGrandchild1>' +
+                          '</grandchild1>' +
+                        '</child1>' +
+                      '</root>';
+          var expected = {
+            'root': {
+              'child1': {
+                'grandchild1': {
+                  'greatGrandchild1': {}
                 }
               }
             }
-          }
-        };
-        expect(jsonifier.xmlToJSON(test)).toEqual(expected);
+          };
+          expect(jsonifier.xmlToJSON(test)).toEqual(expected);
+      });
+      it ('should build object with one child, one grandchild, and one great great grandchild', function() {
+          var test = '<root>' +
+                        '<child1>' +
+                          '<grandchild1>' +
+                            '<greatGrandchild1>' +
+                              '<greatGreatGrandchild1></greatGreatGrandchild1>' +
+                            '</greatGrandchild1>' +
+                          '</grandchild1>' +
+                        '</child1>' +
+                      '</root>';
+          var expected = {
+            'root': {
+              'child1': {
+                'grandchild1': {
+                  'greatGrandchild1': {
+                    'greatGreatGrandchild1': {}
+                  }
+                }
+              }
+            }
+          };
+          expect(jsonifier.xmlToJSON(test)).toEqual(expected);
+      });
+    });
+    
+    describe('xml with with attributes', function() {
+      it ('should build object with one child with one attritube on the root node', function() {
+          var test = '<root>' +
+                        '<child1 attr1="attrVal1"></child1>' +
+                      '</root>';
+          var expected = {
+            'root': {
+              'child1': {
+                'attr1': 'attrVal1'
+              }
+            }
+          };
+          expect(jsonifier.xmlToJSON(test)).toEqual(expected);
+      });
+      it ('should build object with an attribute on the root node, and a child with attributes on the root node', function() {
+          var test = '<root attr1="attrVal1">' +
+                        '<child1 attr1="attrVal1"></child1>' +
+                      '</root>';
+          var expected = {
+            'root': {
+              'child1': {
+                'attr1': 'attrVal1'
+              },
+              'attr1': 'attrVal1'
+            }
+          };
+          expect(jsonifier.xmlToJSON(test)).toEqual(expected);
+      });
+      it ('should build object with two attributes on the root node, and a child with attributes on the root node', function() {
+          var test = '<root attr1="attrVal1" attr2="attrVal2">' +
+                        '<child1 attr1="attrVal1"></child1>' +
+                      '</root>';
+          var expected = {
+            'root': {
+              'child1': {
+                'attr1': 'attrVal1'
+              },
+              'attr1': 'attrVal1',
+              'attr2': 'attrVal2'
+            }
+          };
+          expect(jsonifier.xmlToJSON(test)).toEqual(expected);
+      });
+      it ('should build object with one child with two attritubes on the root node', function() {
+          var test = '<root>' +
+                        '<child1 attr1="attrVal1" attr2="attrVal2"></child1>' +
+                      '</root>';
+          var expected = {
+            'root': {
+              'child1': {
+                'attr1': 'attrVal1',
+                'attr2': 'attrVal2'
+              }
+            }
+          };
+          expect(jsonifier.xmlToJSON(test)).toEqual(expected);
+      });
+      it ('should build object with two children each with two attritubes on the root node', function() {
+          var test = '<root>' +
+                        '<child1 attr1="attrVal1" attr2="attrVal2"></child1>' +
+                        '<child2 attr1="attrVal1" attr2="attrVal2"></child2>' +
+                      '</root>';
+          var expected = {
+            'root': {
+              'child1': {
+                'attr1': 'attrVal1',
+                'attr2': 'attrVal2'
+              },
+              'child2': {
+                'attr1': 'attrVal1',
+                'attr2': 'attrVal2'
+              }
+            }
+          };
+          expect(jsonifier.xmlToJSON(test)).toEqual(expected);
+      });
+
+      it ('should build object with one child, one grandchild, and one great grandchild, each having one attribute ', function() {
+          var test = '<root>' +
+                        '<child1 attr1="attrVal1">' +
+                          '<grandchild1 attr1="attrVal1">' +
+                            '<greatGrandchild1 attr1="attrVal1"></greatGrandchild1>' +
+                          '</grandchild1>' +
+                        '</child1>' +
+                      '</root>';
+          var expected = {
+            'root': {
+              'child1': {
+                'grandchild1': {
+                  'greatGrandchild1': {
+                    'attr1': 'attrVal1'
+                  },
+                  'attr1': 'attrVal1'
+                },
+                'attr1': 'attrVal1'
+              }
+            }
+          };
+          expect(jsonifier.xmlToJSON(test)).toEqual(expected);
+      });
+    });
+
+    describe('xml with with values', function() {
+      
     });
   });
-  
 });

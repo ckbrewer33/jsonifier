@@ -30,6 +30,8 @@ var jsonifier = (function() {
 	*	@return {object} - The xml string represented in a JavaScript object
 	*/
 	function xmlToJSON(xmlString) {
+		validateXML(xmlString);  // Will throw an error if the xml is not valid
+
 		var tokens = tokenizeXML(xmlString);
 		var currToken = '';
 		var i = 0;
@@ -53,7 +55,7 @@ var jsonifier = (function() {
 				scopeUp();
 			}
 			else if (isEmptyTag(currToken)) {
-
+				addObjectAtCurrentScope(currToken, json);
 			}
 			else if (isValue(currToken)) {
 
@@ -254,6 +256,9 @@ var jsonifier = (function() {
 					throw "Malformed xml string -- " + getScope() + ': missing closing tag';
 				}
 				scopeUp();
+			}
+			else if (isEmptyTag(currToken)) {
+				// Do nothing, empty tag doesn't affect scope
 			}
 			else {
 				throw "Invalid token found: " + currToken;
