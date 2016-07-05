@@ -24,6 +24,11 @@ var jsonifier = (function() {
 		return version;
 	}
 
+	/*
+	*	Parses an xml string into a JavaScript object
+	*	@param {String} xmlString - A propely formed xml string
+	*	@return {object} - The xml string represented in a JavaScript object
+	*/
 	function xmlToJSON(xmlString) {
 		var tokens = tokenizeXML(xmlString);
 		var currToken = '';
@@ -61,6 +66,10 @@ var jsonifier = (function() {
 		return json;
 	}
 
+	/*
+	*	Adds an object based off of a token to the current xml json object.  Location is determined by the global scope variable
+	*	@param {String} token - An xml token
+	*/
 	function addObjectAtCurrentScope(token, json) {
 		var tagObject = createObjectFromTag(token);
 		var tmp = {};
@@ -83,6 +92,11 @@ var jsonifier = (function() {
 		// }
 	}
 
+	/*
+	*	Splits an xml string into individual tokens including tags and values.
+	*	@param {String} xmlString
+	*	@return {Array} - Returns an array of all the tags and values of the xml string
+	*/
 	function tokenizeXML(xmlString) {
 		var tokens = [];
 		var tmpToken = '';
@@ -162,6 +176,11 @@ var jsonifier = (function() {
 		return ret;
 	}
 
+	/**
+	 * Gets all of the attributes from an xml tag
+	 * @param {String} tag
+	 * @return {Array} - Returns an array of all the attributes in the format 'key="value"'
+	 */
 	function getAttributes(tag) {
 		tag = stripAngleBrackets(tag);
 		
@@ -179,6 +198,11 @@ var jsonifier = (function() {
 		return attributes;
 	}
 
+	/*
+	*	Parses attribute strings into a size 2 array for assignment to objects
+	*	@param {String} attribute - An xml attribute as it appears in the xml, i.e. 'key="value"'
+	*	@return {Array}  - Returns an array of size 2, with the attribute name in position [0] and the value in position [1]
+	*/
 	function parseAttribute(attribute) {
 		if ('' === attribute) {
 			return null;
@@ -193,27 +217,28 @@ var jsonifier = (function() {
 		return keyValPair;
 	}
 
+	/*
+	*	Creates a JavaScript object from an xml tag with all of the attributes as object properties.  The node value is not included.
+	*	@param {String} tag - An xml tag, with or without attributes
+	*	@return {Object} - Returns an object containing all of the xml attributes as properties
+	*/
 	function createObjectFromTag(tag) {
-		var nodeObject = {}
+		var tagObject = {};
 		var tagName = getTagName(tag);
 		var attributes = getAttributes(tag);
-		var currAttribute
+		var currAttribute;
 		var key;
 		var value;
 		var i = 0;
-
-		// Create node object root
-		// nodeObject[tagName] = {};
 		
-		// Add node attributes to object
 		for (i = 0; i < attributes.length; i++) {
 			currAttribute = parseAttribute(attributes[i]);
 			key = currAttribute[0];
 			value = currAttribute[1];
-			nodeObject[key] = value;
+			tagObject[key] = value;
 		}
 
-		return nodeObject;
+		return tagObject;
 	}
 
 	function validateXML(xmlString) {

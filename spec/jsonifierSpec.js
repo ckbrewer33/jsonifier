@@ -233,6 +233,21 @@ describe('jsonifier', function() {
         };
         expect(jsonifier.xmlToJSON(test)).toEqual(expected);
     });
+    // it ('should parse build object tree with one child and one grandchild', function() {
+    //     var test = '<root>' +
+    //                   '<child1>' +
+    //                     '<granchild1>' +
+    //                   '</child1>' +
+    //                 '</root>';
+    //     var expected = {
+    //       'root': {
+    //         'child1': {
+    //           'grandchild1': {}
+    //         }
+    //       }
+    //     };
+    //     expect(jsonifier.xmlToJSON(test)).toEqual(expected);
+    // });
   });
   
 });
