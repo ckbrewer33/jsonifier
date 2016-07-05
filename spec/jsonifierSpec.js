@@ -310,6 +310,48 @@ describe('jsonifier', function() {
         };
         expect(jsonifier.xmlToJSON(test)).toEqual(expected);
     });
+    it ('should parse build object tree with one child, one grandchild, and one great grandchild', function() {
+        var test = '<root>' +
+                      '<child1>' +
+                        '<grandchild1>' +
+                          '<greatGrandchild1></greatGrandchild1>' +
+                        '</grandchild1>' +
+                      '</child1>' +
+                    '</root>';
+        var expected = {
+          'root': {
+            'child1': {
+              'grandchild1': {
+                'greatGrandchild1': {}
+              }
+            }
+          }
+        };
+        expect(jsonifier.xmlToJSON(test)).toEqual(expected);
+    });
+    it ('should parse build object tree with one child, one grandchild, and one great great grandchild', function() {
+        var test = '<root>' +
+                      '<child1>' +
+                        '<grandchild1>' +
+                          '<greatGrandchild1>' +
+                            '<greatGreatGrandchild1></greatGreatGrandchild1>' +
+                          '</greatGrandchild1>' +
+                        '</grandchild1>' +
+                      '</child1>' +
+                    '</root>';
+        var expected = {
+          'root': {
+            'child1': {
+              'grandchild1': {
+                'greatGrandchild1': {
+                  'greatGreatGrandchild1': {}
+                }
+              }
+            }
+          }
+        };
+        expect(jsonifier.xmlToJSON(test)).toEqual(expected);
+    });
   });
   
 });

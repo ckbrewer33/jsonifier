@@ -81,8 +81,9 @@ var jsonifier = (function() {
 		}
 		else {
 			// Navigate to the appropriate scope level in the object to add this new tag data
-			for (i = 0; i < xmlScope.length-1; i++) {
-				tmp = json[xmlScope[i]];
+			tmp = json[xmlScope[0]];
+			for (i = 1; i < xmlScope.length-1; i++) {
+				tmp = tmp[xmlScope[i]];
 			}
 
 			tmp[getScope()][getTagName(token)] = tagObject;
