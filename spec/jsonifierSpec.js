@@ -143,6 +143,83 @@ describe('jsonifier', function() {
         ];
         expect(jsonifier.extractAttributes(test)).toEqual(expected);
     });
-  })
+  });
+
+  describe('parseAttribute', function() {
+    it ('should return a valid object from \'test="testVal"\'', function() {
+        var test = 'test="testVal"';
+        var expected = ['test','testVal'];
+        expect(jsonifier.parseAttribute(test)).toEqual(expected);
+    });
+    it ('should return a null from an empty string', function() {
+        var test = '';
+        var expected = null;
+        expect(jsonifier.parseAttribute(test)).toEqual(expected);
+    });
+  });
+
+  describe('createnodeObject', function() {
+    it ('should make an object with no additional properties or functions from <test>', function() {
+      var test = '<test>';
+      var expected = {
+        "test": {}
+      }
+      expect(jsonifier.createNodeObject(test)).toEqual(expected);
+    });
+    it ('should make an object with properties from <test attr1="val1">', function() {
+      var test = '<test attr1="val1">';
+      var expected = {
+        "test": {
+          'attr1': 'val1'
+        }
+      }
+      expect(jsonifier.createNodeObject(test)).toEqual(expected);
+    });
+    it ('should make an object with properties from <test attr1="val1" attr2="val2" attr3="val3">', function() {
+      var test = '<test attr1="val1" attr2="val2" attr3="val3">';
+      var expected = {
+        "test": {
+          'attr1': 'val1',
+          'attr2': 'val2',
+          'attr3': 'val3'
+        }
+      }
+      expect(jsonifier.createNodeObject(test)).toEqual(expected);
+    });
+    it ('should make an object with no additional properties or functions from <test/>', function() {
+      var test = '<test/>';
+      var expected = {
+        "test": {}
+      }
+      expect(jsonifier.createNodeObject(test)).toEqual(expected);
+    });
+    it ('should make an object with properties from <test attr1="val1"/>', function() {
+      var test = '<test attr1="val1"/>';
+      var expected = {
+        "test": {
+          'attr1': 'val1'
+        }
+      }
+      expect(jsonifier.createNodeObject(test)).toEqual(expected);
+    });
+    it ('should make an object with properties from <test attr1="val1" attr2="val2" attr3="val3"/>', function() {
+      var test = '<test attr1="val1" attr2="val2" attr3="val3"/>';
+      var expected = {
+        'test': {
+          'attr1': 'val1',
+          'attr2': 'val2',
+          'attr3': 'val3'
+        }
+      }
+      expect(jsonifier.createNodeObject(test)).toEqual(expected);
+    });
+    it ('should add the node value to the node object', function() {
+      var test = '<test>theValue</test>';
+      var expected = {
+        'test': 'theValue'
+      }
+      expect(jsonifier.createNodeObject(test)).toEqual(expected);
+    })
+  });
   
 });

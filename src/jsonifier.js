@@ -6,12 +6,14 @@ var jsonifier = (function() {
 		xmlToJSON: xmlToJSON,
 		validateXML: validateXML,
 		
-		// Methods here only exposed for testing, not intended for api
+		// Methods here are only exposed for testing, not intended for api
 		isOpenTag: isOpenTag,
 		isCloseTag: isCloseTag,
 		isEmptyTag: isEmptyTag,
 		extractTagName: extractTagName,
-		extractAttributes: extractAttributes
+		extractAttributes: extractAttributes,
+		createNodeObject: createNodeObject,
+		parseAttribute: parseAttribute
 	};
 
 	return apiMethods;
@@ -103,9 +105,11 @@ var jsonifier = (function() {
 
 	function extractAttributes(tag) {
 		tag = stripAngleBrackets(tag);
+		
 		var tokens = tag.split(' ');
 		var attributes = [];
 		var tagName = extractTagName(tag);
+		var currAttribute = {};
 
 		for (var i = 0; i < tokens.length; i++) {
 			if (tokens[i].indexOf(tagName) === -1) {
@@ -114,6 +118,43 @@ var jsonifier = (function() {
 		}
 
 		return attributes;
+	}
+
+	function parseAttribute(attribute) {
+		if ('' === attribute) {
+			return null;
+		}
+
+		var keyValPair = attribute.split('=');
+		var key = keyValPair[0];
+		var value = keyValPair[1].substring(1, keyValPair[1].length-1);
+		
+
+		keyValPair = [key, value]
+		return keyValPair;
+	}
+
+	function createNodeObject(tag) {
+		var nodeObject = {}
+		var tagName = extractTagName(tag);
+		var attributes = extractAttributes(tag);
+		var currAttribute
+		var key;
+		var value;
+		var i = 0;
+
+		// Create node object root
+		nodeObject[tagName] = {};
+		
+		// Add node attributes to object
+		for (i = 0; i < attributes.length; i++) {
+			currAttribute = parseAttribute(attributes[i]);
+			key = currAttribute[0];
+			value = currAttribute[1];
+			nodeObject[tagName][key] = value;
+		}
+
+		return nodeObject;
 	}
 
 	function validateXML(xmlString) {
