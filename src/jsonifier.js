@@ -1,11 +1,11 @@
 var jsonifier = (function() {
-	var version = "1.0";
+	var version = "0.1";
 	var currScope = '';
 	
 	var apiMethods = {
 		version: getVersion,
 		xmlToJSON: xmlToJSON,
-		validateXML: validateXML,
+		validateXML: validateXML, // NOT IMPLEMENTED
 		
 		// Methods here are only exposed for testing, not intended for api
 		isOpenTag: isOpenTag,
