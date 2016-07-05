@@ -239,7 +239,29 @@ var jsonifier = (function() {
 	}
 
 	function validateXML(xmlString) {
-		// TODO
+		var tokens = tokenizeXML(xmlString);
+		var currToken = '';
+		
+		xmlScope = [];
+		for (var i = 0; i < tokens.length; i++) {
+			currToken = tokens[i];
+			if (isOpenTag(currToken)) {
+				scopeDown(currToken)
+			}
+			else if (isCloseTag(currToken)) {
+				if (getScope() !== getTagName(currToken)) {
+					throw "Malformed xml string -- " + getScope() + ': missing closing tag';
+				}
+				scopeUp();
+			}
+			else {
+				throw "Invalid token found: " + currToken;
+			}
+		}
+
+		xmlScope = [];
+
+		return true;
 	}
 
 	function scopeDown(tag) {

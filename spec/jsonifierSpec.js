@@ -201,7 +201,26 @@ describe('jsonifier', function() {
       }
       expect(jsonifier.createObjectFromTag(test)).toEqual(expected);
     });
-  });  
+  });
+
+  describe('validateXML', function() {
+    it('should yell at you when you pass in javascript with non-matching tags', function() {
+      var test = '<root>' +
+                    '<child1>' +
+                  '</root>';
+      
+      expect(function() {
+        jsonifier.validateXML(test);
+      }).toThrow();
+    });
+    it('should NOT yell at you when you pass in javascript with non-matching tags', function() {
+      var test = '<root>' +
+                    '<child1></child1>' +
+                  '</root>';
+      
+      expect(jsonifier.validateXML(test)).toEqual(true);
+    });
+  });
 
   describe('xmlToJSON', function() {
     it ('should parse build object tree with one child', function() {
@@ -216,6 +235,7 @@ describe('jsonifier', function() {
         };
         expect(jsonifier.xmlToJSON(test)).toEqual(expected);
     });
+
     it ('should parse build object tree with multiple children on the root node', function() {
         var test = '<root>' +
                       '<child1></child1>' +
