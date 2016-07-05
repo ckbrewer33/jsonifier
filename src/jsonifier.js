@@ -79,17 +79,14 @@ var jsonifier = (function() {
 		if (xmlScope.length === 1) {
 			json[getScope()][getTagName(token)] = tagObject;
 		}
-		// else {
-		// 	// Navigate to the appropriate scope level in the object to add this new tag data
-		// 	for (i = 0; i < xmlScope.length-1; i++) {
-		// 		if (i === xmlScope.length-1) {
-		// 			json[xmlScope[i]] = tagObject
-		// 			break;
-		// 		}
-				
-		// 		tmp = json[xmlScope[i]];
-		// 	}
-		// }
+		else {
+			// Navigate to the appropriate scope level in the object to add this new tag data
+			for (i = 0; i < xmlScope.length-1; i++) {
+				tmp = json[xmlScope[i]];
+			}
+
+			tmp[getScope()][getTagName(token)] = tagObject;
+		}
 	}
 
 	/*
