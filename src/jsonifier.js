@@ -4,9 +4,12 @@ var jsonifier = (function() {
 	var apiMethods = {
 		version: getVersion,
 		xmlToJSON: xmlToJSON,
+		
+		// Methods here only exposed for testing, not intended for api
 		isOpenTag: isOpenTag,
 		isCloseTag: isCloseTag,
-		isEmptyTag: isEmptyTag
+		isEmptyTag: isEmptyTag,
+		extractTagName: extractTagName
 	};
 
 	return apiMethods;
@@ -74,6 +77,24 @@ var jsonifier = (function() {
 			chars[chars.length-2] === '/' &&
 			chars[chars.length-1] === '>'
 		);
+	}
+
+	function extractTagName(tag) {
+		var ret = tag;
+
+		// Strip the angle brackets
+		ret = ret.replace('</', '');
+		ret = ret.replace('<', '');
+		ret = ret.replace('/>', '');
+		ret = ret.replace('>', '');
+
+		// Pick out the tag name from the attributes 
+		if (ret.indexOf(' ') !== -1)
+		{
+			ret = ret.substring(0, ret.indexOf(' '));
+		}
+
+		return ret;
 	}
 
 	

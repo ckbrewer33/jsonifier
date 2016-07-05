@@ -80,5 +80,32 @@ describe('jsonifier', function() {
         expect(jsonifier.isEmptyTag(test)).toEqual(true);
     });
   });
+
+  describe('extractTagName', function() {
+    it('should extract "test" from <test>', function() {
+        var test = '<test>';
+        expect(jsonifier.extractTagName(test)).toEqual('test');
+    });
+    it('should extract "test" from </test>', function() {
+        var test = '</test>';
+        expect(jsonifier.extractTagName(test)).toEqual('test');
+    });
+    it('should extract "test" from <test/>', function() {
+        var test = '<test/>';
+        expect(jsonifier.extractTagName(test)).toEqual('test');
+    });
+    it('should extract "test" from <test id="something">', function() {
+        var test = '<test id="something">';
+        expect(jsonifier.extractTagName(test)).toEqual('test');
+    });
+    it('should extract "test" from </test id="something">', function() {
+        var test = '</test id="something">';
+        expect(jsonifier.extractTagName(test)).toEqual('test');
+    });
+    it('should extract "test" from <test id="something"/>', function() {
+        var test = '<test id="something"/>';
+        expect(jsonifier.extractTagName(test)).toEqual('test');
+    });
+  });
   
 });
