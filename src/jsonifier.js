@@ -1,6 +1,7 @@
 var jsonifier = (function() {
 	var version = "0.1";
-	var currScope = '';
+	var currScope = [];
+	var json = {};
 	
 	var apiMethods = {
 		version: getVersion,
@@ -13,7 +14,7 @@ var jsonifier = (function() {
 		isEmptyTag: isEmptyTag,
 		getTagName: getTagName,
 		getAttributes: getAttributes,
-		createNodeObject: createNodeObject,
+		createObjectFromTag: createObjectFromTag,
 		parseAttribute: parseAttribute
 	};
 
@@ -25,17 +26,61 @@ var jsonifier = (function() {
 
 	function xmlToJSON(xmlString) {
 		var tokens = tokenizeXML(xmlString);
+		var currToken = '';
 		var i = 0;
-		
+
 		// reset scope for this parsing run
-		currScope = '';
+		currScope = [];
 		scopeDown(tokens[0]);
 
-		for (i = 0; i < tokens.length; i++) {
+		// Reset the json output object for this parsing run
+		json = {};
+		json[getTagName(tokens[0])] = createObjectFromTag(tokens[0]);
 
+		// Parse the xml tree via the tokens
+		for (i = 1; i < tokens.length; i++) {
+			currToken = tokens[i];
+			if (isOpenTag(currToken)) {
+				addObjectAtCurrentScope(currToken, json);
+				scopeDown(currToken)
+			}
+			else if (isCloseTag(currToken)) {
+				scopeUp();
+			}
+			else if (isEmptyTag(currToken)) {
+
+			}
+			else if (isValue(currToken)) {
+
+			}
+			else {
+				throw "Invalid token found: " + currToken;
+			}
 		}
 		
-		return "";
+		return json;
+	}
+
+	function addObjectAtCurrentScope(token, json) {
+		var tagObject = createObjectFromTag(token);
+		var tmp = {};
+		var i = 0;
+		
+		// If at the root scope, just add the tag object
+		if (currScope.length === 1) {
+			json[getScope()][getTagName(token)] = tagObject;
+		}
+		// else {
+		// 	// Navigate to the appropriate scope level in the object to add this new tag data
+		// 	for (i = 0; i < currScope.length-1; i++) {
+		// 		if (i === currScope.length-1) {
+		// 			json[currScope[i]] = tagObject
+		// 			break;
+		// 		}
+				
+		// 		tmp = json[currScope[i]];
+		// 	}
+		// }
 	}
 
 	function tokenizeXML(xmlString) {
@@ -148,7 +193,7 @@ var jsonifier = (function() {
 		return keyValPair;
 	}
 
-	function createNodeObject(tag) {
+	function createObjectFromTag(tag) {
 		var nodeObject = {}
 		var tagName = getTagName(tag);
 		var attributes = getAttributes(tag);
@@ -158,14 +203,14 @@ var jsonifier = (function() {
 		var i = 0;
 
 		// Create node object root
-		nodeObject[tagName] = {};
+		// nodeObject[tagName] = {};
 		
 		// Add node attributes to object
 		for (i = 0; i < attributes.length; i++) {
 			currAttribute = parseAttribute(attributes[i]);
 			key = currAttribute[0];
 			value = currAttribute[1];
-			nodeObject[tagName][key] = value;
+			nodeObject[key] = value;
 		}
 
 		return nodeObject;
@@ -176,17 +221,15 @@ var jsonifier = (function() {
 	}
 
 	function scopeDown(tag) {
-		currScope += '/' + getTagName(tag);
+		currScope.push(getTagName(tag));
 	}
 
 	function scopeUp() {
-		var scopeEnd = currScope.lastIndexOf('/');
-		currScope = currScope.substring(0, scopeEnd);
+		currScope.pop();
 	}
 
-	function currentScope() {
-		var scopeEnd = currScope.lastIndexOf('/');
-		return currScope.substring(scopeEnd+1);
+	function getScope() {
+		return currScope[currScope.length-1];
 	}
 	
 }).call({});

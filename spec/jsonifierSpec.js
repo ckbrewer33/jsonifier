@@ -158,60 +158,80 @@ describe('jsonifier', function() {
     });
   });
 
-  describe('createnodeObject', function() {
+  describe('createObjectFromTag', function() {
     it ('should make an object with no additional properties or functions from <test>', function() {
       var test = '<test>';
-      var expected = {
-        "test": {}
-      }
-      expect(jsonifier.createNodeObject(test)).toEqual(expected);
+      var expected = {}
+      expect(jsonifier.createObjectFromTag(test)).toEqual(expected);
     });
     it ('should make an object with properties from <test attr1="val1">', function() {
       var test = '<test attr1="val1">';
       var expected = {
-        "test": {
           'attr1': 'val1'
-        }
       }
-      expect(jsonifier.createNodeObject(test)).toEqual(expected);
+      expect(jsonifier.createObjectFromTag(test)).toEqual(expected);
     });
     it ('should make an object with properties from <test attr1="val1" attr2="val2" attr3="val3">', function() {
       var test = '<test attr1="val1" attr2="val2" attr3="val3">';
       var expected = {
-        "test": {
           'attr1': 'val1',
           'attr2': 'val2',
           'attr3': 'val3'
-        }
       }
-      expect(jsonifier.createNodeObject(test)).toEqual(expected);
+      expect(jsonifier.createObjectFromTag(test)).toEqual(expected);
     });
     it ('should make an object with no additional properties or functions from <test/>', function() {
       var test = '<test/>';
-      var expected = {
-        "test": {}
-      }
-      expect(jsonifier.createNodeObject(test)).toEqual(expected);
+      var expected = {}
+      expect(jsonifier.createObjectFromTag(test)).toEqual(expected);
     });
     it ('should make an object with properties from <test attr1="val1"/>', function() {
       var test = '<test attr1="val1"/>';
       var expected = {
-        "test": {
-          'attr1': 'val1'
-        }
+        'attr1': 'val1'
       }
-      expect(jsonifier.createNodeObject(test)).toEqual(expected);
+      expect(jsonifier.createObjectFromTag(test)).toEqual(expected);
     });
     it ('should make an object with properties from <test attr1="val1" attr2="val2" attr3="val3"/>', function() {
       var test = '<test attr1="val1" attr2="val2" attr3="val3"/>';
       var expected = {
-        'test': {
-          'attr1': 'val1',
-          'attr2': 'val2',
-          'attr3': 'val3'
-        }
+        'attr1': 'val1',
+        'attr2': 'val2',
+        'attr3': 'val3'
       }
-      expect(jsonifier.createNodeObject(test)).toEqual(expected);
+      expect(jsonifier.createObjectFromTag(test)).toEqual(expected);
+    });
+  });  
+
+  describe('xmlToJSON', function() {
+    it ('should parse build object tree with one child', function() {
+        var test = '<root>' +
+                      '<child1>' +
+                      '</child1>' +
+                    '</root>';
+        var expected = {
+          'root': {
+            'child1': {}
+          }
+        };
+        expect(jsonifier.xmlToJSON(test)).toEqual(expected);
+    });
+    it ('should parse build object tree with multiple children on the root node', function() {
+        var test = '<root>' +
+                      '<child1></child1>' +
+                      '<child2></child2>' +
+                      '<child3></child2>' +
+                      '<child4></child2>' +
+                    '</root>';
+        var expected = {
+          'root': {
+            'child1': {},
+            'child2': {},
+            'child3': {},
+            'child4': {}
+          }
+        };
+        expect(jsonifier.xmlToJSON(test)).toEqual(expected);
     });
   });
   
