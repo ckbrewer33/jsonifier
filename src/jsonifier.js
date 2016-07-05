@@ -25,7 +25,15 @@ var jsonifier = (function() {
 
 	function xmlToJSON(xmlString) {
 		var tokens = tokenizeXML(xmlString);
-		currScope = tokens;
+		var i = 0;
+		
+		// reset scope for this parsing run
+		currScope = '';
+		scopeDown(tokens[0]);
+
+		for (i = 0; i < tokens.length; i++) {
+
+		}
 		
 		return "";
 	}
@@ -56,8 +64,8 @@ var jsonifier = (function() {
 		return tokens;
 	}
 
-	function isOpenTag(tag) {
-		var chars = tag.split('');
+	function isOpenTag(token) {
+		var chars = token.split('');
 		return (
 			chars[0] === '<' &&
 			chars[1] !== '/' &&
@@ -66,8 +74,8 @@ var jsonifier = (function() {
 		);
 	}
 
-	function isCloseTag(tag) {
-		var chars = tag.split('');
+	function isCloseTag(token) {
+		var chars = token.split('');
 		return (
 			chars[0] === '<' &&
 			chars[1] === '/' &&
@@ -76,13 +84,17 @@ var jsonifier = (function() {
 		);
 	}
 
-	function isEmptyTag(tag) {
-		var chars = tag.split('');
+	function isEmptyTag(token) {
+		var chars = token.split('');
 		return (
 			chars[0] === '<' &&
 			chars[chars.length-2] === '/' &&
 			chars[chars.length-1] === '>'
 		);
+	}
+
+	function isValue(token) {
+		return (!isOpenTag(token) && !isCloseTag(token) && !isEmptyTag(token));
 	}
 
 	function getTagName(tag) {
@@ -161,6 +173,20 @@ var jsonifier = (function() {
 
 	function validateXML(xmlString) {
 		// TODO
+	}
+
+	function scopeDown(tag) {
+		currScope += '/' + getTagName(tag);
+	}
+
+	function scopeUp() {
+		var scopeEnd = currScope.lastIndexOf('/');
+		currScope = currScope.substring(0, scopeEnd);
+	}
+
+	function currentScope() {
+		var scopeEnd = currScope.lastIndexOf('/');
+		return currScope.substring(scopeEnd+1);
 	}
 	
 }).call({});
