@@ -18,14 +18,6 @@ var jsonifier = (function() {
 	function xmlToJSON(xmlString) {
 		var tokens = tokenizeXML(xmlString);
 		
-		// console.log(tokens);
-		console.log(isOpenTag('<test>'));	//true
-		console.log(isOpenTag('</test>'));	//false
-		console.log(isCloseTag('<test>'));	//false
-		console.log(isCloseTag('</test>'));	//true
-		console.log(isEmptyTag('<test>'));	//false
-		console.log(isEmptyTag('</test>'));	//false
-		console.log(isEmptyTag('<test/>'));	//true
 		return "";
 	}
 
@@ -60,6 +52,7 @@ var jsonifier = (function() {
 		return (
 			chars[0] === '<' &&
 			chars[1] !== '/' &&
+			chars[chars.length-2] !== '/' &&
 			chars[chars.length-1] === '>'
 		);
 	}
@@ -69,6 +62,7 @@ var jsonifier = (function() {
 		return (
 			chars[0] === '<' &&
 			chars[1] === '/' &&
+			chars[chars.length-2] !== '/' &&
 			chars[chars.length-1] === '>'
 		);
 	}
