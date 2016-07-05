@@ -3,7 +3,10 @@ var jsonifier = (function() {
 	
 	var apiMethods = {
 		version: getVersion,
-		xmlToJSON: xmlToJSON
+		xmlToJSON: xmlToJSON,
+		isOpenTag: isOpenTag,
+		isCloseTag: isCloseTag,
+		isEmptyTag: isEmptyTag
 	};
 
 	return apiMethods;
@@ -14,7 +17,15 @@ var jsonifier = (function() {
 
 	function xmlToJSON(xmlString) {
 		var tokens = tokenizeXML(xmlString);
-		console.log(tokens);
+		
+		// console.log(tokens);
+		console.log(isOpenTag('<test>'));	//true
+		console.log(isOpenTag('</test>'));	//false
+		console.log(isCloseTag('<test>'));	//false
+		console.log(isCloseTag('</test>'));	//true
+		console.log(isEmptyTag('<test>'));	//false
+		console.log(isEmptyTag('</test>'));	//false
+		console.log(isEmptyTag('<test/>'));	//true
 		return "";
 	}
 
@@ -42,6 +53,33 @@ var jsonifier = (function() {
 		}
 
 		return tokens;
+	}
+
+	function isOpenTag(tag) {
+		var chars = tag.split('');
+		return (
+			chars[0] === '<' &&
+			chars[1] !== '/' &&
+			chars[chars.length-1] === '>'
+		);
+	}
+
+	function isCloseTag(tag) {
+		var chars = tag.split('');
+		return (
+			chars[0] === '<' &&
+			chars[1] === '/' &&
+			chars[chars.length-1] === '>'
+		);
+	}
+
+	function isEmptyTag(tag) {
+		var chars = tag.split('');
+		return (
+			chars[0] === '<' &&
+			chars[chars.length-2] === '/' &&
+			chars[chars.length-1] === '>'
+		);
 	}
 
 	
