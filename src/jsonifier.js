@@ -1,5 +1,6 @@
 var jsonifier = (function() {
 	var version = "1.0";
+	var currScope = '';
 	
 	var apiMethods = {
 		version: getVersion,
@@ -10,8 +11,8 @@ var jsonifier = (function() {
 		isOpenTag: isOpenTag,
 		isCloseTag: isCloseTag,
 		isEmptyTag: isEmptyTag,
-		extractTagName: extractTagName,
-		extractAttributes: extractAttributes,
+		getTagName: getTagName,
+		getAttributes: getAttributes,
 		createNodeObject: createNodeObject,
 		parseAttribute: parseAttribute
 	};
@@ -24,6 +25,7 @@ var jsonifier = (function() {
 
 	function xmlToJSON(xmlString) {
 		var tokens = tokenizeXML(xmlString);
+		currScope = tokens;
 		
 		return "";
 	}
@@ -83,7 +85,7 @@ var jsonifier = (function() {
 		);
 	}
 
-	function extractTagName(tag) {
+	function getTagName(tag) {
 		var ret = stripAngleBrackets(tag);
 
 		// Pick out the tag name from the attributes 
@@ -103,12 +105,12 @@ var jsonifier = (function() {
 		return ret;
 	}
 
-	function extractAttributes(tag) {
+	function getAttributes(tag) {
 		tag = stripAngleBrackets(tag);
 		
 		var tokens = tag.split(' ');
 		var attributes = [];
-		var tagName = extractTagName(tag);
+		var tagName = getTagName(tag);
 		var currAttribute = {};
 
 		for (var i = 0; i < tokens.length; i++) {
@@ -136,8 +138,8 @@ var jsonifier = (function() {
 
 	function createNodeObject(tag) {
 		var nodeObject = {}
-		var tagName = extractTagName(tag);
-		var attributes = extractAttributes(tag);
+		var tagName = getTagName(tag);
+		var attributes = getAttributes(tag);
 		var currAttribute
 		var key;
 		var value;

@@ -81,42 +81,42 @@ describe('jsonifier', function() {
     });
   });
 
-  describe('extractTagName', function() {
+  describe('getTagName', function() {
     it('should extract "test" from <test>', function() {
         var test = '<test>';
-        expect(jsonifier.extractTagName(test)).toEqual('test');
+        expect(jsonifier.getTagName(test)).toEqual('test');
     });
     it('should extract "test" from </test>', function() {
         var test = '</test>';
-        expect(jsonifier.extractTagName(test)).toEqual('test');
+        expect(jsonifier.getTagName(test)).toEqual('test');
     });
     it('should extract "test" from <test/>', function() {
         var test = '<test/>';
-        expect(jsonifier.extractTagName(test)).toEqual('test');
+        expect(jsonifier.getTagName(test)).toEqual('test');
     });
     it('should extract "test" from <test id="something">', function() {
         var test = '<test id="something">';
-        expect(jsonifier.extractTagName(test)).toEqual('test');
+        expect(jsonifier.getTagName(test)).toEqual('test');
     });
     it('should extract "test" from </test id="something">', function() {
         var test = '</test id="something">';
-        expect(jsonifier.extractTagName(test)).toEqual('test');
+        expect(jsonifier.getTagName(test)).toEqual('test');
     });
     it('should extract "test" from <test id="something"/>', function() {
         var test = '<test id="something"/>';
-        expect(jsonifier.extractTagName(test)).toEqual('test');
+        expect(jsonifier.getTagName(test)).toEqual('test');
     });
   });
 
-  describe('extractAttributes', function() {
+  describe('getAttributes', function() {
     it ('should return an empty array from <test>', function() {
         var test = '<test>';
-        expect(jsonifier.extractAttributes(test)).toEqual([]);
+        expect(jsonifier.getAttributes(test)).toEqual([]);
     });
     it ('should return an all attributes from array from <test id="something">', function() {
         var test = '<test id="something">';
         var expected = ['id="something"'];
-        expect(jsonifier.extractAttributes(test)).toEqual(expected);
+        expect(jsonifier.getAttributes(test)).toEqual(expected);
     });
     it ('should return an all attributes from array from <test attr1="attr1" attr2="attr2">', function() {
         var test = '<test attr1="attr1" attr2="attr2">';
@@ -124,16 +124,16 @@ describe('jsonifier', function() {
           'attr1="attr1"',
           'attr2="attr2"'
         ];
-        expect(jsonifier.extractAttributes(test)).toEqual(expected);
+        expect(jsonifier.getAttributes(test)).toEqual(expected);
     });
     it ('should return an empty array from <test/>', function() {
         var test = '<test/>';
-        expect(jsonifier.extractAttributes(test)).toEqual([]);
+        expect(jsonifier.getAttributes(test)).toEqual([]);
     });
     it ('should return an all attributes from array from <test id="something"/>', function() {
         var test = '<test id="something"/>';
         var expected = ['id="something"'];
-        expect(jsonifier.extractAttributes(test)).toEqual(expected);
+        expect(jsonifier.getAttributes(test)).toEqual(expected);
     });
     it ('should return an all attributes from array from <test attr1="attr1" attr2="attr2"/>', function() {
         var test = '<test attr1="attr1" attr2="attr2"/>';
@@ -141,7 +141,7 @@ describe('jsonifier', function() {
           'attr1="attr1"',
           'attr2="attr2"'
         ];
-        expect(jsonifier.extractAttributes(test)).toEqual(expected);
+        expect(jsonifier.getAttributes(test)).toEqual(expected);
     });
   });
 
@@ -213,13 +213,6 @@ describe('jsonifier', function() {
       }
       expect(jsonifier.createNodeObject(test)).toEqual(expected);
     });
-    it ('should add the node value to the node object', function() {
-      var test = '<test>theValue</test>';
-      var expected = {
-        'test': 'theValue'
-      }
-      expect(jsonifier.createNodeObject(test)).toEqual(expected);
-    })
   });
   
 });
