@@ -4,12 +4,14 @@ var jsonifier = (function() {
 	var apiMethods = {
 		version: getVersion,
 		xmlToJSON: xmlToJSON,
+		validateXML: validateXML,
 		
 		// Methods here only exposed for testing, not intended for api
 		isOpenTag: isOpenTag,
 		isCloseTag: isCloseTag,
 		isEmptyTag: isEmptyTag,
-		extractTagName: extractTagName
+		extractTagName: extractTagName,
+		extractAttributes: extractAttributes
 	};
 
 	return apiMethods;
@@ -80,13 +82,7 @@ var jsonifier = (function() {
 	}
 
 	function extractTagName(tag) {
-		var ret = tag;
-
-		// Strip the angle brackets
-		ret = ret.replace('</', '');
-		ret = ret.replace('<', '');
-		ret = ret.replace('/>', '');
-		ret = ret.replace('>', '');
+		var ret = stripAngleBrackets(tag);
 
 		// Pick out the tag name from the attributes 
 		if (ret.indexOf(' ') !== -1)
@@ -97,6 +93,32 @@ var jsonifier = (function() {
 		return ret;
 	}
 
+	function stripAngleBrackets(tag) {
+		ret = tag.replace('</', '');
+		ret = ret.replace('<', '');
+		ret = ret.replace('/>', '');
+		ret = ret.replace('>', '');
+		return ret;
+	}
+
+	function extractAttributes(tag) {
+		tag = stripAngleBrackets(tag);
+		var tokens = tag.split(' ');
+		var attributes = [];
+		var tagName = extractTagName(tag);
+
+		for (var i = 0; i < tokens.length; i++) {
+			if (tokens[i].indexOf(tagName) === -1) {
+				attributes.push(tokens[i]);
+			}
+		}
+
+		return attributes;
+	}
+
+	function validateXML(xmlString) {
+		// TODO
+	}
 	
 }).call({});
 
