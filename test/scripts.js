@@ -11,9 +11,10 @@ app.controller('testController', ['$scope', function($scope) {
 						'<test3 id="theId" value="theValue">val3</test3>'+
 						'<test4></test4>'+
 						'<test5/>'+
-					'</MyRoot>'
+					'</MyRoot>';
+
 	
-	var result = jsonifier.xmlToJSON(xmlText);
+	$scope.thing = jsonifier.xmlToJSON(xmlText);
 	
 }]);
 
