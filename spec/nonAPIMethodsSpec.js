@@ -207,5 +207,30 @@ describe('Non-API Methods', function() {
       }
       expect(jsonifier.createObjectFromTag(test)).toEqual(expected);
     });
+
+    describe('tokenizeXML', function() {
+      it('should not include comments', function() {
+        var test = '<root><!-- comment --></root>';
+        var expected = [
+          '<root>',
+          '</root>'
+        ];
+        expect(jsonifier.tokenizeXML(test)).toEqual(expected);
+      });
+      it('should not include complex comments', function() {
+        var test = '<root>' +
+                      '<!--' + 
+                        '<commentedOutNode1/>' +
+                        '<commentedOutNode2/>' +
+                        '<commentedOutNode3/>' +
+                      ' -->' +
+                    '</root>';
+        var expected = [
+          '<root>',
+          '</root>'
+        ];
+        expect(jsonifier.tokenizeXML(test)).toEqual(expected);
+      });
+    });
   });
 });

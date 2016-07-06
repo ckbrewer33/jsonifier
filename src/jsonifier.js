@@ -15,7 +15,8 @@ var jsonifier = (function() {
 		getTagName: getTagName,
 		getAttributes: getAttributes,
 		createObjectFromTag: createObjectFromTag,
-		parseAttribute: parseAttribute
+		parseAttribute: parseAttribute,
+		tokenizeXML: tokenizeXML
 	};
 
 	return apiMethods;
@@ -210,19 +211,42 @@ var jsonifier = (function() {
 		
 		for (var c = 0; c < xmlString.length; c++) {
 			char = xmlString.charAt(c);
+
+			// If finished reading a value, push it to the token list
 			if ('' !== tmpToken && '<' === char)
 			{
 				tokens.push(tmpToken);
 				tmpToken = '';
 			}
 
+			// If not at the end of the tag, keep going
 			if ('>' !== char) {
 				tmpToken += char;
 			}
 			
+			// End of tag found, push it to the token list
 			if ('>' === char) {
 				tmpToken += char;
 				tokens.push(tmpToken);
+				tmpToken = '';
+			}
+
+			// Process comment
+			if (tmpToken === '<!--') {
+				while (true) {
+					char = xmlString.charAt(++c);
+					
+					// Check for the end of the comment
+					if ('-' === char) {
+						var next = xmlString.charAt(c+1);
+						var nextnext = xmlString.charAt(c+2);
+
+						if (next === '-' && nextnext === '>') {
+							c += 2; // Advance c past the end of the comment (3 for the 3 characters in '-->')
+							break;
+						}
+					}
+				}
 				tmpToken = '';
 			}
 		}
