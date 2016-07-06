@@ -209,27 +209,42 @@ describe('Non-API Methods', function() {
     });
 
     describe('tokenizeXML', function() {
-      it('should not include comments', function() {
-        var test = '<root><!-- comment --></root>';
-        var expected = [
-          '<root>',
-          '</root>'
-        ];
-        expect(jsonifier.tokenizeXML(test)).toEqual(expected);
+      describe('comments', function() {
+        it('should not include comments', function() {
+          var test = '<root><!-- comment --></root>';
+          var expected = [
+            '<root>',
+            '</root>'
+          ];
+          expect(jsonifier.tokenizeXML(test)).toEqual(expected);
+        });
+        it('should not include complex comments', function() {
+          var test = '<root>' +
+                        '<!--' + 
+                          '<commentedOutNode1/>' +
+                          '<commentedOutNode2/>' +
+                          '<commentedOutNode3/>' +
+                        ' -->' +
+                      '</root>';
+          var expected = [
+            '<root>',
+            '</root>'
+          ];
+          expect(jsonifier.tokenizeXML(test)).toEqual(expected);
+        });
       });
-      it('should not include complex comments', function() {
-        var test = '<root>' +
-                      '<!--' + 
-                        '<commentedOutNode1/>' +
-                        '<commentedOutNode2/>' +
-                        '<commentedOutNode3/>' +
-                      ' -->' +
-                    '</root>';
-        var expected = [
-          '<root>',
-          '</root>'
-        ];
-        expect(jsonifier.tokenizeXML(test)).toEqual(expected);
+
+      describe('tokenizing', function() {
+        it('should not care about white space between nodes', function() {
+          var test = '<root> <child> </child> </root>';
+          var expected = [
+            '<root>',
+            '<child>',
+            '</child>',
+            '</root>'
+          ];
+          expect(jsonifier.tokenizeXML(test)).toEqual(expected);
+        });
       });
     });
   });

@@ -212,6 +212,11 @@ var jsonifier = (function() {
 		for (var c = 0; c < xmlString.length; c++) {
 			char = xmlString.charAt(c);
 
+			// Skip any whitespace between nodes
+			if (tmpToken === '' && ' ' === char) {
+				char = xmlString.charAt(++c);
+			}
+
 			// If finished reading a value, push it to the token list
 			if ('' !== tmpToken && '<' === char)
 			{
