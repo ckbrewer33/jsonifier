@@ -129,16 +129,23 @@ describe('Non-API Methods', function() {
         var test = '<test/>';
         expect(jsonifier.getAttributes(test)).toEqual([]);
     });
-    it ('should return an all attributes from array from <test id="something"/>', function() {
+    it ('should return an all attributes from <test id="something"/>', function() {
         var test = '<test id="something"/>';
         var expected = ['id="something"'];
         expect(jsonifier.getAttributes(test)).toEqual(expected);
     });
-    it ('should return an all attributes from array from <test attr1="attr1" attr2="attr2"/>', function() {
+    it ('should return an all attributes from <test attr1="attr1" attr2="attr2"/>', function() {
         var test = '<test attr1="attr1" attr2="attr2"/>';
         var expected = [
           'attr1="attr1"',
           'attr2="attr2"'
+        ];
+        expect(jsonifier.getAttributes(test)).toEqual(expected);
+    });
+    it ('should return an all attributes from <test testId="attr1"/> even though the name of the tag is in the name of the attribute', function() {
+        var test = '<test testId="attr1"/>';
+        var expected = [
+          'testId="attr1"'
         ];
         expect(jsonifier.getAttributes(test)).toEqual(expected);
     });

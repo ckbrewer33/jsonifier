@@ -250,7 +250,7 @@ var jsonifier = (function() {
 		var currAttribute = {};
 
 		for (var i = 0; i < tokens.length; i++) {
-			if (tokens[i].indexOf(tagName) === -1) {
+			if (tokens[i] !== tagName) {
 				attributes.push(tokens[i]);
 			}
 		}
