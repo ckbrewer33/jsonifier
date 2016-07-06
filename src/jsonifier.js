@@ -58,7 +58,7 @@ var jsonifier = (function() {
 				addObjectAtCurrentScope(currToken, json);
 			}
 			else if (isValue(currToken)) {
-
+				addValueAtCurrentScope(currToken, json);
 			}
 			else {
 				throw "Invalid token found: " + currToken;
@@ -69,8 +69,46 @@ var jsonifier = (function() {
 	}
 
 	/*
+	*	Validates an xml string by checking the structure
+	*	@param {String} xmlString - A propely formed xml string
+	*	@return {boolean} - true if the xml string is valid
+	*	@throws
+	*/
+	function validateXML(xmlString) {
+		var tokens = tokenizeXML(xmlString);
+		var currToken = '';
+		
+		xmlScope = [];
+		for (var i = 0; i < tokens.length; i++) {
+			currToken = tokens[i];
+			if (isOpenTag(currToken)) {
+				scopeDown(currToken)
+			}
+			else if (isCloseTag(currToken)) {
+				if (getScope() !== getTagName(currToken)) {
+					throw "Malformed xml string -- " + getScope() + ': missing closing tag';
+				}
+				scopeUp();
+			}
+			else if (isEmptyTag(currToken)) {
+				// Do nothing, empty tag doesn't affect scope
+			}
+			else if (isValue(currToken)) {
+				// Do nothing, values don't affect scope
+			}
+			else {
+				throw "Invalid token found: " + currToken;
+			}
+		}
+
+		xmlScope = [];
+
+		return true;
+	}
+
+	/*
 	*	Adds an object based off of a token to the current xml json object.  Location is determined by the global scope variable
-	*	@param {String} token - An xml token
+	*	@param {String} token - An xml tag
 	*/
 	function addObjectAtCurrentScope(token, json) {
 		var tagObject = createObjectFromTag(token);
@@ -89,6 +127,28 @@ var jsonifier = (function() {
 			}
 
 			tmp[getScope()][getTagName(token)] = tagObject;
+		}
+	}
+
+	/*
+	*	Adds a property to the json object.  Location is determined by the global scope variable
+	*	@param {String} token - An xml value
+	*/
+	function addValueAtCurrentScope(token, json) {
+		var tmp = {};
+		var i = 0;
+
+		if (xmlScope.length === 1) {
+			json[getScope()]['_value'] = token;
+		}
+		else {
+			// Navigate to the appropriate scope level in the object to add this new tag data
+			tmp = json[xmlScope[0]];
+			for (i = 1; i < xmlScope.length-1; i++) {
+				tmp = tmp[xmlScope[i]];
+			}
+
+			tmp[getScope()]['_value'] = token;
 		}
 	}
 
@@ -239,38 +299,6 @@ var jsonifier = (function() {
 		}
 
 		return tagObject;
-	}
-
-	function validateXML(xmlString) {
-		var tokens = tokenizeXML(xmlString);
-		var currToken = '';
-		
-		xmlScope = [];
-		for (var i = 0; i < tokens.length; i++) {
-			currToken = tokens[i];
-			if (isOpenTag(currToken)) {
-				scopeDown(currToken)
-			}
-			else if (isCloseTag(currToken)) {
-				if (getScope() !== getTagName(currToken)) {
-					throw "Malformed xml string -- " + getScope() + ': missing closing tag';
-				}
-				scopeUp();
-			}
-			else if (isEmptyTag(currToken)) {
-				// Do nothing, empty tag doesn't affect scope
-			}
-			else if (isValue(currToken)) {
-				// Do nothing, values don't affect scope
-			}
-			else {
-				throw "Invalid token found: " + currToken;
-			}
-		}
-
-		xmlScope = [];
-
-		return true;
 	}
 
 	function scopeDown(tag) {
