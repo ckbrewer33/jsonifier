@@ -138,9 +138,7 @@ var jsonifier = (function() {
 
 			// If there is already an object with the same name at this location, create an array for it
 			if (tmp[getScope()][getTagName(token)]) {
-				if (typeof(tmp[getScope()][getTagName(token)]) === 'object') {
-					console.log('there is an object here already');
-				}
+				addSameNameTagObject(token, tagObject, tmp);
 			}
 			else {
 				tmp[getScope()][getTagName(token)] = tagObject;
