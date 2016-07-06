@@ -154,7 +154,7 @@ describe('Non-API Methods', function() {
   describe('parseAttribute', function() {
     it ('should return a valid object from \'test="testVal"\'', function() {
         var test = 'test="testVal"';
-        var expected = ['test','testVal'];
+        var expected = ['@test','testVal'];
         expect(jsonifier.parseAttribute(test)).toEqual(expected);
     });
     it ('should return a null from an empty string', function() {
@@ -173,16 +173,16 @@ describe('Non-API Methods', function() {
     it ('should make an object with properties from <test attr1="val1">', function() {
       var test = '<test attr1="val1">';
       var expected = {
-          'attr1': 'val1'
+          '@attr1': 'val1'
       }
       expect(jsonifier.createObjectFromTag(test)).toEqual(expected);
     });
     it ('should make an object with properties from <test attr1="val1" attr2="val2" attr3="val3">', function() {
       var test = '<test attr1="val1" attr2="val2" attr3="val3">';
       var expected = {
-          'attr1': 'val1',
-          'attr2': 'val2',
-          'attr3': 'val3'
+          '@attr1': 'val1',
+          '@attr2': 'val2',
+          '@attr3': 'val3'
       }
       expect(jsonifier.createObjectFromTag(test)).toEqual(expected);
     });
@@ -194,16 +194,16 @@ describe('Non-API Methods', function() {
     it ('should make an object with properties from <test attr1="val1"/>', function() {
       var test = '<test attr1="val1"/>';
       var expected = {
-        'attr1': 'val1'
+        '@attr1': 'val1'
       }
       expect(jsonifier.createObjectFromTag(test)).toEqual(expected);
     });
     it ('should make an object with properties from <test attr1="val1" attr2="val2" attr3="val3"/>', function() {
       var test = '<test attr1="val1" attr2="val2" attr3="val3"/>';
       var expected = {
-        'attr1': 'val1',
-        'attr2': 'val2',
-        'attr3': 'val3'
+        '@attr1': 'val1',
+        '@attr2': 'val2',
+        '@attr3': 'val3'
       }
       expect(jsonifier.createObjectFromTag(test)).toEqual(expected);
     });

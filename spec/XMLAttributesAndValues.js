@@ -7,7 +7,7 @@ describe('XML With Attributes and Values', function() {
 			var test = '<root rootId="rootId">someValue</root>'
 			var expected = {
 				'root': {
-					'rootId': 'rootId',
+					'@rootId': 'rootId',
 					'_value': 'someValue'
 				}
 			}
@@ -20,7 +20,7 @@ describe('XML With Attributes and Values', function() {
 			var expected = {
 				'root': {
 					'child1': {
-						'childId': 'childId',
+						'@childId': 'childId',
 						'_value': 'childValue'
 					}
 				}
@@ -35,11 +35,11 @@ describe('XML With Attributes and Values', function() {
 			var expected = {
 				'root': {
 					'child1': {
-						'child1Id': 'child1Id',
+						'@child1Id': 'child1Id',
 						'_value': 'childValue1'
 					},
 					'child2': {
-						'child2Id': 'child2Id',
+						'@child2Id': 'child2Id',
 						'_value': 'childValue2'
 					}
 				}
@@ -59,19 +59,19 @@ describe('XML With Attributes and Values', function() {
 				'root': {
 					'child1': {
 						'grandchild': {
-							'id': 'grandchild',
+							'@id': 'grandchild',
 							'_value': 'grandchildValue'
 						},
-						'id': 'child1'
+						'@id': 'child1'
 					},
 					'child2': {
 						'grandchild': {
-							'id': 'grandchild',
+							'@id': 'grandchild',
 							'_value': 'grandchildValue'
 						},
-						'id': 'child2'
+						'@id': 'child2'
 					},
-					'id': 'root'
+					'@id': 'root'
 				}
 			};
 			expect(jsonifier.xmlToJSON(test)).toEqual(expected);

@@ -269,7 +269,7 @@ var jsonifier = (function() {
 		}
 
 		var keyValPair = attribute.split('=');
-		var key = keyValPair[0];
+		var key = '@' + keyValPair[0];
 		var value = keyValPair[1].substring(1, keyValPair[1].length-1);
 		
 

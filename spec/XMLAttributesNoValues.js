@@ -10,7 +10,7 @@ describe('XML Attributes No Values', function() {
       var expected = {
         'root': {
           'child1': {
-            'attr1': 'attrVal1'
+            '@attr1': 'attrVal1'
           }
         }
       };
@@ -23,9 +23,9 @@ describe('XML Attributes No Values', function() {
       var expected = {
         'root': {
           'child1': {
-            'attr1': 'attrVal1'
+            '@attr1': 'attrVal1'
           },
-          'attr1': 'attrVal1'
+          '@attr1': 'attrVal1'
         }
       };
       expect(jsonifier.xmlToJSON(test)).toEqual(expected);
@@ -37,10 +37,10 @@ describe('XML Attributes No Values', function() {
       var expected = {
         'root': {
           'child1': {
-            'attr1': 'attrVal1'
+            '@attr1': 'attrVal1'
           },
-          'attr1': 'attrVal1',
-          'attr2': 'attrVal2'
+          '@attr1': 'attrVal1',
+          '@attr2': 'attrVal2'
         }
       };
       expect(jsonifier.xmlToJSON(test)).toEqual(expected);
@@ -52,8 +52,8 @@ describe('XML Attributes No Values', function() {
       var expected = {
         'root': {
           'child1': {
-            'attr1': 'attrVal1',
-            'attr2': 'attrVal2'
+            '@attr1': 'attrVal1',
+            '@attr2': 'attrVal2'
           }
         }
       };
@@ -67,12 +67,12 @@ describe('XML Attributes No Values', function() {
       var expected = {
         'root': {
           'child1': {
-            'attr1': 'attrVal1',
-            'attr2': 'attrVal2'
+            '@attr1': 'attrVal1',
+            '@attr2': 'attrVal2'
           },
           'child2': {
-            'attr1': 'attrVal1',
-            'attr2': 'attrVal2'
+            '@attr1': 'attrVal1',
+            '@attr2': 'attrVal2'
           }
         }
       };
@@ -91,11 +91,11 @@ describe('XML Attributes No Values', function() {
           'child1': {
             'grandchild1': {
               'greatGrandchild1': {
-                'attr1': 'attrVal1'
+                '@attr1': 'attrVal1'
               },
-              'attr1': 'attrVal1'
+              '@attr1': 'attrVal1'
             },
-            'attr1': 'attrVal1'
+            '@attr1': 'attrVal1'
           }
         }
       };
