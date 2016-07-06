@@ -353,6 +353,8 @@ var jsonifier = (function() {
 				}
 			}
 
+			// If current character is a ' ', and we're not parsing a value, then we're at the end of the attribute.
+			// Clear the whitespace character so it isn't included in the attribute token
 			if (char === ' ' && !parsingValue) {
 				char = '';
 			}
