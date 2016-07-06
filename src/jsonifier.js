@@ -6,7 +6,7 @@ var jsonifier = (function() {
 	var apiMethods = {
 		version: getVersion,
 		xmlToJSON: xmlToJSON,
-		validateXML: validateXML, // NOT IMPLEMENTED
+		validateXML: validateXML,
 		
 		// Methods here are only exposed for testing, not intended for api
 		isOpenTag: isOpenTag,
