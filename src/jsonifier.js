@@ -109,6 +109,7 @@ var jsonifier = (function() {
 	/*
 	*	Adds an object based off of a token to the current xml json object.  Location is determined by the global scope variable
 	*	@param {String} token - An xml tag
+	*	@param {object} json - the json object currently being built
 	*/
 	function addObjectAtCurrentScope(token, json) {
 		var tagObject = createObjectFromTag(token);
@@ -117,26 +118,67 @@ var jsonifier = (function() {
 		
 		// If at the root scope, just add the tag object
 		if (xmlScope.length === 1) {
-			json[getScope()][getTagName(token)] = tagObject;
+			// If the object already exists, then create an array and put in there with the new tag object
+			if (json[getScope()][getTagName(token)]) {
+				addSameNameTagObject(token, tagObject, json);
+			}
+			else {
+				json[getScope()][getTagName(token)] = tagObject;
+			}
+
 		}
+		// Otherwise, navigate to the appropriate scope level in the object to add this new tag data
 		else {
-			// Navigate to the appropriate scope level in the object to add this new tag data
+			
 			tmp = json[xmlScope[0]];
+			
 			for (i = 1; i < xmlScope.length-1; i++) {
 				tmp = tmp[xmlScope[i]];
 			}
 
-			tmp[getScope()][getTagName(token)] = tagObject;
+			// If there is already an object with the same name at this location, create an array for it
+			if (tmp[getScope()][getTagName(token)]) {
+				if (typeof(tmp[getScope()][getTagName(token)]) === 'object') {
+					console.log('there is an object here already');
+				}
+			}
+			else {
+				tmp[getScope()][getTagName(token)] = tagObject;
+			}
+		}
+	}
+
+	/*
+	*	Adds an object array when an object alreay exists in a certain scope
+	*	@param {String} token - An xml tag
+	*	@param {object} tagObject - a tagObject created from the createObjectFromTag method
+	*	@param {object} json - the json object currently being built
+	*/
+	function addSameNameTagObject(token, tagObject, json) {
+		var tagObjArray = [];
+		// if there is already an array here, then just push the new value to it
+		if (Array.isArray(json[getScope()][getTagName(token)])) {	
+			json[getScope()][getTagName(token)].push(tagObject);
+		}
+		// else create the array and place the existing object in it, followed by the new object
+		else {
+			tagObjArray.push(json[getScope()][getTagName(token)]);
+			tagObjArray.push(tagObject);
+			
+			// replace the existing scope object with tagObjArray
+			json[getScope()][getTagName(token)] = tagObjArray;
 		}
 	}
 
 	/*
 	*	Adds a property to the json object.  Location is determined by the global scope variable
-	*	@param {String} token - An xml value
+	*	@param {String} token - An xml value (not a tag)
+	*	@param {object} json - the json object currently being built
 	*/
 	function addValueAtCurrentScope(token, json) {
 		var tmp = {};
 		var i = 0;
+		var objArrayEndIndex = 0;
 
 		if (xmlScope.length === 1) {
 			json[getScope()]['_value'] = token;
@@ -148,7 +190,13 @@ var jsonifier = (function() {
 				tmp = tmp[xmlScope[i]];
 			}
 
-			tmp[getScope()]['_value'] = token;
+			if (Array.isArray(tmp[getScope()])) {
+				objArrayEndIndex = tmp[getScope()].length-1;
+				tmp[getScope()][objArrayEndIndex]['_value'] = token;
+			}
+			else {
+				tmp[getScope()]['_value'] = token;
+			}
 		}
 	}
 
