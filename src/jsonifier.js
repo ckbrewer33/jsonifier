@@ -318,17 +318,51 @@ var jsonifier = (function() {
 	 * @return {Array} - Returns an array of all the attributes in the format 'key="value"'
 	 */
 	function getAttributes(tag) {
+		var attributes = [];
+		var attribute = '';
+		var parsingValue = false;
+		var parsedName = false;
+		var tagName = getTagName(tag);
+
 		tag = stripAngleBrackets(tag);
 		
-		var tokens = tag.split(' ');
-		var attributes = [];
-		var tagName = getTagName(tag);
-		var currAttribute = {};
-
-		for (var i = 0; i < tokens.length; i++) {
-			if (tokens[i] !== tagName) {
-				attributes.push(tokens[i]);
+		char = tag.charAt(0);
+		attribute += char;
+		for (var c = 1; c < tag.length; c++) {
+			char = tag.charAt(c);
+			
+			// If the value parsed out is the tagname, then ignore
+			if (!parsedName && attribute === tagName) {
+				attribute = '';
+				parsedName = true;
 			}
+
+			// If at the end of an attribute, then add it to the list and clear the attribute variable
+			if (attribute !== '' && char === ' ' && !parsingValue) {
+				attributes.push(attribute);
+				attribute = '';
+			}
+
+			// If current character is a ", then check if starting or finishing an attribute value
+			if (char === '"') {
+				if (!parsingValue) {
+					parsingValue = true;
+				}
+				else {
+					parsingValue = false;
+				}
+			}
+
+			if (char === ' ' && !parsingValue) {
+				char = '';
+			}
+
+			attribute += char;
+		}
+
+		// Make sure the last attribute read get added to the list
+		if (attribute !== '' && attribute !== tagName) {
+			attributes.push(attribute);
 		}
 
 		return attributes;
@@ -347,7 +381,6 @@ var jsonifier = (function() {
 		var keyValPair = attribute.split('=');
 		var key = '@' + keyValPair[0];
 		var value = keyValPair[1].substring(1, keyValPair[1].length-1);
-		
 
 		keyValPair = [key, value]
 		return keyValPair;
