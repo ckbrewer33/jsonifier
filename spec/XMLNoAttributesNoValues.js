@@ -1,3 +1,6 @@
+/* 
+* Tests for the xmlToJSON method, using xml inputs with only xml structure, no values or attributes
+*/
 describe('XML No Attributes No Values', function() {
   describe('xmlToJSON', function() {
     describe('xml with no attributes and no values', function() {

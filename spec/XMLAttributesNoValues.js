@@ -1,3 +1,6 @@
+/* 
+* Tests for the xmlToJSON method, using xml inputs with attribues, but no values
+*/
 describe('XML Attributes No Values', function() {
   describe('xml with with attributes', function() {
     it ('should build object with one child with one attritube on the root node', function() {

@@ -1,3 +1,6 @@
+/* 
+* Tests for API methods other than xmlToJSON
+*/
 describe('Other Methods', function() {
 	describe('validateXML', function() {
 		it('should yell at you when you pass in javascript with non-matching tags', function() {
