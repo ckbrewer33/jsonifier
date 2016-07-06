@@ -331,7 +331,6 @@ var jsonifier = (function() {
 	*/
 	function createObjectFromTag(tag) {
 		var tagObject = {};
-		var tagName = getTagName(tag);
 		var attributes = getAttributes(tag);
 		var currAttribute;
 		var key;

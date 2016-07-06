@@ -1,7 +1,7 @@
 /* 
 * Tests for the xmlToJSON method, using xml inputs with duplicate tag names
 */
-describe('XML With Attributes and Values', function() {
+describe('XML With Attributes and Values and duplicate tag names', function() {
 	describe('xmlToJSON', function() {
 		it ('should create an array of objects to hold two tag objects of the same name on the root node', function() {
 			var test = '<root>' + 
