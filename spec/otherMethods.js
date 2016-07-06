@@ -18,7 +18,13 @@ describe('Other Methods', function() {
 		});
 		it('should NOT yell at you when using empty tags', function() {
 			var test = '<root>' +
-							'<child1 attr1="attrVal1" attr2="attrVal2"></child1>' +
+							'<child1 attr1="attrVal1" attr2="attrVal2"/>' +
+						'</root>';
+			expect(jsonifier.validateXML(test)).toEqual(true);           
+		});
+		it('should NOT yell at you when there is a value in the xml node', function() {
+			var test = '<root>' +
+							'<child1>someValue</child1>' +
 						'</root>';
 			expect(jsonifier.validateXML(test)).toEqual(true);           
 		});

@@ -260,6 +260,9 @@ var jsonifier = (function() {
 			else if (isEmptyTag(currToken)) {
 				// Do nothing, empty tag doesn't affect scope
 			}
+			else if (isValue(currToken)) {
+				// Do nothing, values don't affect scope
+			}
 			else {
 				throw "Invalid token found: " + currToken;
 			}
