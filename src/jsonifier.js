@@ -206,21 +206,22 @@ var jsonifier = (function() {
 	function tokenizeXML(xmlString) {
 		var tokens = [];
 		var tmpToken = '';
-		var chars = xmlString.split('');
+		var char = '';
 		
-		for (var c = 0; c < chars.length; c++) {
-			if ('' !== tmpToken && '<' === chars[c])
+		for (var c = 0; c < xmlString.length; c++) {
+			char = xmlString.charAt(c);
+			if ('' !== tmpToken && '<' === char)
 			{
 				tokens.push(tmpToken);
 				tmpToken = '';
 			}
 
-			if ('>' !== chars[c]) {
-				tmpToken += chars[c];
+			if ('>' !== char) {
+				tmpToken += char;
 			}
 			
-			if ('>' === chars[c]) {
-				tmpToken += chars[c];
+			if ('>' === char) {
+				tmpToken += char;
 				tokens.push(tmpToken);
 				tmpToken = '';
 			}
