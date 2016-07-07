@@ -7,6 +7,7 @@ var jsonifier = (function() {
 		version: getVersion,
 		xmlToJSON: xmlToJSON,
 		validateXML: validateXML,
+		xmlContains: xmlContains,
 		
 		// Methods here are only exposed for testing, not intended for api
 		isOpenTag: isOpenTag,
@@ -105,6 +106,82 @@ var jsonifier = (function() {
 		xmlScope = [];
 
 		return true;
+	}
+
+	/*
+	*	Generates a json object from the given xml and traverses it to find the indicated value at the path given and returns true if found, false if not found
+	*	Use '@' to indicate a path to an attribute value: path/to/@attribute
+	*	Use '_value' to indicate a path to a node value: path/to/_value
+	*
+	*	@param {String} xmlString - The xml document to be searched
+	*	@param {String} value - The value to be searched for
+	*	@param {String} xpathToValue - the XPath of where to find the value
+	*	@return {boolean} - Returns true if the value is found on the indicated path, otherwise returns false
+	*/
+	function xmlContains(xmlString, value, xpathToValue) {
+		var json = xmlToJSON(xmlString);
+		var splitPath = xpathToValue.split('/');
+		var pathStep = '';
+		var tmpObj = {};
+		var regEx = /(\w*\[\@\w*\=\"\w*\"\])/;
+		var attributePath = {};
+		var i = 0;
+
+		tmpObj = json[splitPath[0]];
+		
+		// Traverse the json object
+		for (i = 1; i < splitPath.length; i++) {
+			
+			// Check to see if the path we have traversed so far is still defined
+			if (!tmpObj) {
+				return false;
+			}
+			
+			pathStep = splitPath[i];
+			
+			// If an xpath attribute is in the path, find the node that the attribute belongs to
+			if (regEx.test(pathStep)) {
+				attributePath = parseXPathAttribute(pathStep)
+				tmpObj = tmpObj[attributePath.tagName];
+
+				if (!Array.isArray(tmpObj)) {
+					tmpObj = tmpObj[attributePath.attributeValue];
+				}
+				else {
+					// Loop over the array of node objects until the one with the matching id is found
+					for (var nodeIndex = 0; nodeIndex < tmpObj.length; nodeIndex++) {
+						if (tmpObj[nodeIndex][attributePath.attributeName] === attributePath.attributeValue) {
+							tmpObj = tmpObj[nodeIndex];
+							break;
+						}
+					}
+				}
+			}
+			else {
+				tmpObj = tmpObj[pathStep];
+			}
+		}
+
+		return tmpObj === value;
+	}
+
+
+	/*
+	*	takes an XPath section containing an attribute and returns an size 3 array containing the tag name, the attribute name, and the attribute value expected
+	*	@param {String} xPathAttribute - A section of xPath containing an attribute: i.e. 'tagName[@attribute="something"]'
+	*	@return {Array} - returns an object with the path split into properties
+	*/
+	function parseXPathAttribute(xPathAttribute) {
+		var splitPath = xPathAttribute.split('[@');
+		var parsedAttribute = parseAttribute(splitPath[1].replace(']', ''));
+		
+		var attributePathObj = {
+			'tagName': splitPath[0],
+			'attributeName': parsedAttribute[0],
+			'attributeValue': parsedAttribute[1]
+		};
+
+		return attributePathObj;
 	}
 
 	/*
