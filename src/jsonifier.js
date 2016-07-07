@@ -137,8 +137,13 @@ var jsonifier = (function() {
 				tmp = tmp[xmlScope[i]];
 			}
 
+			// If there is an array of objects at this scope, the add this property to the last item in the array
+			if (Array.isArray(tmp[getScope()])) {
+				tmp = tmp[getScope()];
+				tmp[tmp.length-1][getTagName(token)] = tagObject;
+			}
 			// If there is already an object with the same name at this location, create an array for it
-			if (tmp[getScope()][getTagName(token)]) {
+			else if (tmp[getScope()][getTagName(token)]) {
 				addSameNameTagObject(token, tagObject, tmp);
 			}
 			else {
@@ -189,6 +194,12 @@ var jsonifier = (function() {
 				tmp = tmp[xmlScope[i]];
 			}
 
+			// If this property is an array of nodes, then move to the last object of the array
+			if (Array.isArray(tmp)) {
+				tmp = tmp[tmp.length-1];
+			}
+
+			// If this property contains an array of nodes, then add the value to the object at the tail of the array
 			if (Array.isArray(tmp[getScope()])) {
 				objArrayEndIndex = tmp[getScope()].length-1;
 				tmp[getScope()][objArrayEndIndex]['_value'] = token;

@@ -76,5 +76,37 @@ describe('XML With Attributes and Values', function() {
 			};
 			expect(jsonifier.xmlToJSON(test)).toEqual(expected);
 		});
+		it ('should add multiple grandchild xml values to the correct grandchild json object property when children nodes have the same name', function() {
+			 var test = '<root id="root">' +
+							'<child id="child1">' +
+								'<grandchild id="grandchild">grandchildValue</grandchild>' +
+							'</child>' +
+							'<child id="child2">' +
+								'<grandchild id="grandchild">grandchildValue</grandchild>' +
+							'</child>' +
+						'</root>';
+			var expected = {
+				'root': {
+					'child':[
+						{
+							'grandchild': {
+								'@id': 'grandchild',
+								'_value': 'grandchildValue'
+							},
+							'@id': 'child1'
+						},
+						{
+							'grandchild': {
+								'@id': 'grandchild',
+								'_value': 'grandchildValue'
+							},
+							'@id': 'child2'
+						},
+					],
+					'@id': 'root'
+				}
+			};
+			expect(jsonifier.xmlToJSON(test)).toEqual(expected);
+		});
 	});
 });
