@@ -13,8 +13,9 @@ app.controller('testController', ['$scope', function($scope) {
 						'<test5/>'+
 					'</MyRoot>';
 
-	
-	$scope.thing = jsonifier.xmlToJSON(xmlText);
+	$scope.convertXML = function() {
+		$scope.output = jsonifier.xmlToJSON($scope.xmlTextBox);
+	}
 	
 }]);
 

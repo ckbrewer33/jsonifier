@@ -8,8 +8,11 @@
 <body ng-app="testApp">
 
 	<div ng-controller="testController" class="stuff">
+		<div>Enter XML String:</div>
+		<div><textarea id="xmlBox" ng-model="xmlTextBox"></textarea></div>
+		<div><button ng-click="convertXML()">Convert XML</button></div>
 		<div class="lineOfStuff">
-			{{thing}}
+			{{output}}
 		</div>
 	</div>
 
