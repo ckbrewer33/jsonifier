@@ -14,7 +14,13 @@ app.controller('testController', ['$scope', function($scope) {
 					'</MyRoot>';
 
 	$scope.convertXML = function() {
+		var start = new Date().getTime();
+		
 		$scope.output = jsonifier.xmlToJSON($scope.xmlTextBox);
+		
+		var end = new Date().getTime();
+		var time = end-start;
+		console.log('execution time: ' + time + 'ms');
 	}
 	
 }]);
