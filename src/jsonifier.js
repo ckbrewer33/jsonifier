@@ -28,7 +28,7 @@ var jsonifier = (function() {
 
 	/*
 	*	Parses an xml string into a JavaScript object
-	*	@param {String} xmlString - A propely formed xml string
+	*	@param {String} xmlString - A properly formed xml string
 	*	@return {object} - The xml string represented in a JavaScript object
 	*/
 	function xmlToJSON(xmlString) {
