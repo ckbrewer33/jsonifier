@@ -367,7 +367,7 @@ var jsonifier = (function() {
 						var nextnext = xmlString.charAt(c+2);
 
 						if (next === '-' && nextnext === '>') {
-							c += 2; // Advance c past the end of the comment (3 for the 3 characters in '-->')
+							c += 2; // Advance c past the end of the comment (2 for the final 2 characters in '-->')
 							break;
 						}
 					}
