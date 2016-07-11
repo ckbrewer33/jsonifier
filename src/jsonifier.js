@@ -214,6 +214,10 @@ var jsonifier = (function() {
 				tmp = tmp[xmlScope[i]];
 			}
 
+			if (Array.isArray(tmp)) {
+				tmp = tmp[tmp.length-1];
+			}
+
 			// If there is an array of objects at this scope, the add this property to the last item in the array
 			if (Array.isArray(tmp[getScope()])) {
 				tmp = tmp[getScope()];
@@ -293,6 +297,10 @@ var jsonifier = (function() {
 			tmp = json[xmlScope[0]];
 			for (i = 1; i < xmlScope.length-1; i++) {
 				tmp = tmp[xmlScope[i]];
+
+				if (Array.isArray(tmp)) {
+					tmp = tmp[tmp.length-1];
+				}
 			}
 
 			// If this property is an array of nodes, then move to the last object of the array

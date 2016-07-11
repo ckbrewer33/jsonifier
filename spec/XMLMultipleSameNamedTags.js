@@ -247,5 +247,69 @@ describe('XML With Attributes and Values and duplicate tag names', function() {
 			}
 			expect(jsonifier.xmlToJSON(test)).toEqual(expected);
 		});
+		it ('It should correctly map deeply nested node objects', function() {
+			var test =
+				'<ROOT>'+
+					'<Gen1>'+
+						'<Gen2>'+
+							'<Gen3>'+
+								'<Gen4 id="Gen4_1">'+
+									'<Gen5>'+
+										'<VALUE>val1</VALUE>'+
+									'</Gen5>'+
+								'</Gen4>'+
+								'<Gen4 id="Gen4_2">'+
+									'<Gen5>'+
+										'<VALUE>val2</VALUE>'+
+									'</Gen5>'+
+								'</Gen4>'+
+								'<Gen4 id="Gen4_3">'+
+									'<Gen5>'+
+										'<VALUE>val3</VALUE>'+
+									'</Gen5>'+
+								'</Gen4>'+
+							'</Gen3>'+
+						'</Gen2>'+
+					'</Gen1>'+
+				'</ROOT>';
+			var expected = {
+				"ROOT": {
+					"Gen1": {
+						"Gen2": {
+							"Gen3": {
+								"Gen4": [
+									{
+										"@id": "Gen4_1",
+										"Gen5": {
+											"VALUE": {
+												"_value": "val1"
+											}
+										}
+									},
+									{
+										"@id": "Gen4_2",
+										"Gen5": {
+											"VALUE": {
+												"_value": "val2"
+											}
+										}
+									},
+									{
+										"@id": "Gen4_3",
+										"Gen5": {
+											"VALUE": {
+											"_value": "val3"
+											}
+										}
+									}
+								]
+							}
+						}
+					}
+				}
+			};
+			expect(jsonifier.xmlToJSON(test)).toEqual(expected);
+
+		});
 	});
 });
