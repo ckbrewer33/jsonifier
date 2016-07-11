@@ -154,5 +154,38 @@ describe('Other Methods', function() {
 
 			expect(jsonifier.xmlContains(xml, value, path)).toBe(true);
 		});
+		it ('should find the right grandchild value when there are multiple children and grandchildren of the same name and the desired value is not on the first grandchild', function() {
+			var xml = '<root>' +
+							'<child id="child1" data="child1Data">' +
+								'<grandchild id="grandchild1">grandchild1Value</grandchild>' +
+								'<grandchild id="grandchild2">grandchild2Value</grandchild>' +
+							'</child>' +
+							'<child id="child2" data="child2Data">' +
+								'<grandchild id="grandchild3">grandchild3Value</grandchild>' +
+								'<grandchild id="grandchild4">grandchild4Value</grandchild>' +
+							'</child>' +
+						'</root>';
+			var value = 'grandchild4Value';
+			var path = 'root/child[@id="child2"]/grandchild[@id="grandchild4"]/_value';
+
+			expect(jsonifier.xmlContains(xml, value, path)).toBe(true);
+		});
+		it ('should find the right grandchild value when there are multiple children and grandchildren of the same name and the granchildren are not in sequential order', function() {
+			var xml = '<root>' +
+							'<child id="child1" data="child1Data">' +
+								'<grandchild id="grandchild1">grandchild1Value</grandchild>' +
+								'<grandchild id="grandchild2">grandchild2Value</grandchild>' +
+							'</child>' +
+							'<child id="child2" data="child2Data">' +
+								'<grandchild id="grandchild3">grandchild3Value</grandchild>' +
+								'<grandchild id="grandchild5">grandchild5Value</grandchild>' +
+								'<grandchild id="grandchild4">grandchild4Value</grandchild>' +
+							'</child>' +
+						'</root>';
+			var value = 'grandchild5Value';
+			var path = 'root/child[@id="child2"]/grandchild[@id="grandchild5"]/_value';
+
+			expect(jsonifier.xmlContains(xml, value, path)).toBe(true);
+		});
 	});
 });
