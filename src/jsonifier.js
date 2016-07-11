@@ -217,7 +217,12 @@ var jsonifier = (function() {
 			// If there is an array of objects at this scope, the add this property to the last item in the array
 			if (Array.isArray(tmp[getScope()])) {
 				tmp = tmp[getScope()];
-				tmp[tmp.length-1][getTagName(token)] = tagObject;
+				if (Array.isArray(tmp)) {
+					addSameNameTagObject(token, tagObject, tmp);
+				}
+				else {
+					tmp[tmp.length-1][getTagName(token)] = tagObject;
+				}
 			}
 			// If there is already an object with the same name at this location, create an array for it
 			else if (tmp[getScope()][getTagName(token)]) {
@@ -237,8 +242,27 @@ var jsonifier = (function() {
 	*/
 	function addSameNameTagObject(token, tagObject, json) {
 		var tagObjArray = [];
-		// if there is already an array here, then just push the new value to it
-		if (Array.isArray(json[getScope()][getTagName(token)])) {	
+		
+		// If the current scope is an array, then get the last object in the array and add the new node there
+		if (Array.isArray(json)) {
+			json = json[json.length-1];
+
+			if (!json[getTagName(token)]) {
+				json[getTagName(token)] = tagObject;
+			}
+			else if (Array.isArray(json[getTagName(token)])) {
+				json[getTagName(token)].push(tagObject);
+			}
+			else {
+				tagObjArray.push(json[getTagName(token)]);
+				tagObjArray.push(tagObject);
+
+				json[getTagName(token)] = tagObjArray;
+			}
+		}
+
+		// if there is already an array here, then just push the new node object to it
+		else if (Array.isArray(json[getScope()][getTagName(token)])) {	
 			json[getScope()][getTagName(token)].push(tagObject);
 		}
 		// else create the array and place the existing object in it, followed by the new object

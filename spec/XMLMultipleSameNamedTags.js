@@ -103,5 +103,149 @@ describe('XML With Attributes and Values and duplicate tag names', function() {
 			}
 			expect(jsonifier.xmlToJSON(test)).toEqual(expected);
 		});
+		it ('should create an array of grandchildren on the array of children', function() {
+			var test = '<root>' +
+						'<child id="child1">' +
+							'<grandchild id="grandchild1">grandchild1Value</grandchild>' +
+							'<grandchild id="grandchild2">grandchild2Value</grandchild>' +
+						'</child>' +
+						'<child id="child2">' +
+							'<grandchild id="grandchild3">grandchild3Value</grandchild>' +
+							'<grandchild id="grandchild4">grandchild4Value</grandchild>' +
+						'</child>' +
+					'</root>';
+			var expected = {
+				'root': {
+					'child': [
+						{
+							'grandchild': [
+								{
+									'@id': 'grandchild1',
+									'_value': 'grandchild1Value'
+								},
+								{
+									'@id': 'grandchild2',
+									'_value': 'grandchild2Value'
+								},
+							],
+							'@id': 'child1',
+						},
+						{
+							'grandchild': [
+								{
+									'@id': 'grandchild3',
+									'_value': 'grandchild3Value'
+								},
+								{
+									'@id': 'grandchild4',
+									'_value': 'grandchild4Value'
+								},
+							],
+							'@id': 'child2',
+						}
+					]
+				}
+			}
+			expect(jsonifier.xmlToJSON(test)).toEqual(expected);
+		});
+		it ('should create an array of grandchildren on the array of children, each child having an attribute', function() {
+			var test = '<root>' +
+						'<child id="child1" data="child1Data">' +
+							'<grandchild id="grandchild1">grandchild1Value</grandchild>' +
+							'<grandchild id="grandchild2">grandchild2Value</grandchild>' +
+						'</child>' +
+						'<child id="child2" data="child2Data">' +
+							'<grandchild id="grandchild3">grandchild3Value</grandchild>' +
+							'<grandchild id="grandchild4">grandchild4Value</grandchild>' +
+						'</child>' +
+					'</root>';
+			var expected = {
+				'root': {
+					'child': [
+						{
+							'grandchild': [
+								{
+									'@id': 'grandchild1',
+									'_value': 'grandchild1Value'
+								},
+								{
+									'@id': 'grandchild2',
+									'_value': 'grandchild2Value'
+								},
+							],
+							'@data': 'child1Data',
+							'@id': 'child1'
+						},
+						{
+							'grandchild': [
+								{
+									'@id': 'grandchild3',
+									'_value': 'grandchild3Value'
+								},
+								{
+									'@id': 'grandchild4',
+									'_value': 'grandchild4Value'
+								},
+							],
+							'@data': 'child2Data',
+							'@id': 'child2'
+						}
+					]
+				}
+			}
+			expect(jsonifier.xmlToJSON(test)).toEqual(expected);
+		});
+		it ('should create an array of grandchildren on the array of children, each child having an attribute', function() {
+			var test = '<root>' +
+						'<child id="child1" data="child1Data">' +
+							'<grandchild id="grandchild1">grandchild1Value</grandchild>' +
+							'<grandchild id="grandchild2">grandchild2Value</grandchild>' +
+						'</child>' +
+						'<child id="child2" data="child2Data">' +
+							'<grandchild id="grandchild3">grandchild3Value</grandchild>' +
+							'<grandchild id="grandchild4">grandchild4Value</grandchild>' +
+							'<grandchild id="grandchild5">grandchild5Value</grandchild>' +
+						'</child>' +
+					'</root>';
+			var expected = {
+				'root': {
+					'child': [
+						{
+							'grandchild': [
+								{
+									'@id': 'grandchild1',
+									'_value': 'grandchild1Value'
+								},
+								{
+									'@id': 'grandchild2',
+									'_value': 'grandchild2Value'
+								},
+							],
+							'@data': 'child1Data',
+							'@id': 'child1'
+						},
+						{
+							'grandchild': [
+								{
+									'@id': 'grandchild3',
+									'_value': 'grandchild3Value'
+								},
+								{
+									'@id': 'grandchild4',
+									'_value': 'grandchild4Value'
+								},
+								{
+									'@id': 'grandchild5',
+									'_value': 'grandchild5Value'
+								},
+							],
+							'@data': 'child2Data',
+							'@id': 'child2'
+						}
+					]
+				}
+			}
+			expect(jsonifier.xmlToJSON(test)).toEqual(expected);
+		});
 	});
 });
