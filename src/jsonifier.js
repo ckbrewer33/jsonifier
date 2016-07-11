@@ -216,6 +216,10 @@ var jsonifier = (function() {
 			
 			for (i = 1; i < xmlScope.length-1; i++) {
 				tmp = tmp[xmlScope[i]];
+
+				if (Array.isArray(tmp)) {
+					tmp = tmp[tmp.length-1];
+				}
 			}
 
 			if (Array.isArray(tmp)) {

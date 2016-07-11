@@ -247,9 +247,9 @@ describe('XML With Attributes and Values and duplicate tag names', function() {
 			}
 			expect(jsonifier.xmlToJSON(test)).toEqual(expected);
 		});
-		it ('It should correctly map deeply nested node objects', function() {
+		it ('It should correctly navigate deeply nested arrays', function() {
 			var test =
-				'<ROOT>'+
+				'<root>'+
 					'<Gen1>'+
 						'<Gen2>'+
 							'<Gen3>'+
@@ -271,9 +271,9 @@ describe('XML With Attributes and Values and duplicate tag names', function() {
 							'</Gen3>'+
 						'</Gen2>'+
 					'</Gen1>'+
-				'</ROOT>';
+				'</root>';
 			var expected = {
-				"ROOT": {
+				"root": {
 					"Gen1": {
 						"Gen2": {
 							"Gen3": {
@@ -309,7 +309,60 @@ describe('XML With Attributes and Values and duplicate tag names', function() {
 				}
 			};
 			expect(jsonifier.xmlToJSON(test)).toEqual(expected);
-
+		});
+		it ('It should correctly navigate arrays when adding a new object', function() {
+			var test =
+				'<root>' +
+					'<gen1>' +
+						'<gen2>' +
+							'<gen3 id="gen3_1">' +
+								'<gen4>' +
+									'<gen5>' +
+										'<VALUE>val1</VALUE>' +
+									'</gen5>' +
+								'</gen4>' +
+							'</gen3>' +
+							'<gen3 id="gen3_2">' +
+								'<gen4>' +
+									'<gen5>' +
+										'<VALUE>val2</VALUE>' +
+									'</gen5>' +
+								'</gen4>' +
+							'</gen3>' +
+						'</gen2>' +
+					'</gen1>' +
+				'</root>';
+			var expected = {
+				"root": {
+					"gen1": {
+						"gen2": {
+							"gen3": [
+								{
+									"@id": "gen3_1",
+									"gen4": {
+										"gen5": {
+											"VALUE": {
+												"_value": "val1"
+											}
+										}
+									}
+								},
+								{
+									"@id": "gen3_2",
+									"gen4": {
+										"gen5": {
+											"VALUE": {
+												"_value": "val2"
+											}
+										}
+									}
+								}
+							]
+						}
+					}
+				}
+			};
+			expect(jsonifier.xmlToJSON(test)).toEqual(expected);
 		});
 	});
 });
