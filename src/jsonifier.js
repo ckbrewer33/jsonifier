@@ -32,6 +32,10 @@ var jsonifier = (function() {
 	*	@return {object} - The xml string represented in a JavaScript object
 	*/
 	function xmlToJSON(xmlString) {
+		if (!xmlString || '' ===  xmlString) {
+			return {};
+		}
+
 		validateXML(xmlString);  // Will throw an error if the xml is not valid
 
 		var tokens = tokenizeXML(xmlString);
@@ -332,8 +336,8 @@ var jsonifier = (function() {
 		for (var c = 0; c < xmlString.length; c++) {
 			char = xmlString.charAt(c);
 
-			// Skip any whitespace between nodes
-			if (tmpToken === '' && ' ' === char) {
+			// Skip any leading whitespace, tab, and newline characters between nodes
+			while (tmpToken === '' && (' ' === char || '\n' === char || '\t' === char)) {
 				char = xmlString.charAt(++c);
 			}
 
