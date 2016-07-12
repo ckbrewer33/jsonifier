@@ -70,6 +70,16 @@ describe('Other Methods', function() {
 
 			expect(jsonifier.xmlContains(xml, value, path)).toBe(true);
 		});
+		it ('should find an attribute on a child node when there are multiple children of the same name', function() {
+			var xml = '<root>' +
+							'<child id="child1">child1Value</child>' +
+							'<child id="child2">child2Value</child>' +
+						'</root>';
+			var value = 'child2';
+			var path = 'root/child/@id';
+
+			expect(jsonifier.xmlContains(xml, value, path)).toBe(true);
+		});
 		it ('should find a value on a grandchild node', function() {
 			var xml = '<root>' +
 							'<child1 id="child1">' +

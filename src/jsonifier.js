@@ -166,6 +166,17 @@ var jsonifier = (function() {
 					}
 				}
 			}
+			// If looking for an id on an array of node objects
+			else if (Array.isArray(tmpObj) && pathStep.indexOf('@') !== -1) {
+				for (var nodeIndex = 0; nodeIndex < tmpObj.length; nodeIndex++) {
+					if (tmpObj[nodeIndex][pathStep]) {
+						if (tmpObj[nodeIndex][pathStep] === value){
+							tmpObj = tmpObj[nodeIndex][pathStep];
+							break;
+						}
+					}
+				}
+			}
 			else {
 				tmpObj = tmpObj[pathStep];
 			}
