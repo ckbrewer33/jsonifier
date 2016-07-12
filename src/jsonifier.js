@@ -32,18 +32,19 @@ var jsonifier = (function() {
 	*	@return {object} - The xml string represented in a JavaScript object
 	*/
 	function xmlToJSON(xmlString) {
-		if (!xmlString || '' ===  xmlString) {
-			return {};
-		}
-
-		validateXML(xmlString);  // Will throw an error if the xml is not valid
-
-		var tokens = tokenizeXML(xmlString);
+		var tokens = [];
 		var currToken = '';
 		var i = 0;
 
+		if (!xmlString || '' ===  xmlString) {
+			return {};
+		}
+		validateXML(xmlString);  // Will throw an error if the xml is not valid
+
+		tokens = tokenizeXML(xmlString);		
+
 		// reset scope for this parsing run
-		xmlScope = [];
+		resetGlobalScope();
 		scopeDown(tokens[0]);
 
 		// Reset the json output object for this parsing run
@@ -76,7 +77,7 @@ var jsonifier = (function() {
 
 	/*
 	*	Validates an xml string by checking the structure
-	*	@param {String} xmlString - A propely formed xml string
+	*	@param {String} xmlString - A properly formed xml string
 	*	@return {boolean} - true if the xml string is valid
 	*	@throws
 	*/
@@ -84,7 +85,7 @@ var jsonifier = (function() {
 		var tokens = tokenizeXML(xmlString);
 		var currToken = '';
 		
-		xmlScope = [];
+		resetGlobalScope();
 		for (var i = 0; i < tokens.length; i++) {
 			currToken = tokens[i];
 			if (isOpenTag(currToken)) {
@@ -107,7 +108,7 @@ var jsonifier = (function() {
 			}
 		}
 
-		xmlScope = [];
+		resetGlobalScope();
 
 		return true;
 	}
@@ -176,6 +177,10 @@ var jsonifier = (function() {
 		xmlString = xmlString.replace(new RegExp(/apos;/, 'g'), '\'');
 
 		return xmlString;
+	}
+
+	function resetGlobalScope() {
+		xmlScope = [];
 	}
 
 
@@ -256,7 +261,7 @@ var jsonifier = (function() {
 	}
 
 	/*
-	*	Adds an object array when an object alreay exists in a certain scope
+	*	Adds an object array when an object already exists in a certain scope
 	*	@param {String} token - An xml tag
 	*	@param {object} tagObject - a tagObject created from the createObjectFromTag method
 	*	@param {object} json - the json object currently being built
@@ -443,6 +448,7 @@ var jsonifier = (function() {
 	}
 
 	function stripAngleBrackets(tag) {
+		var ret = '';
 		ret = tag.replace('</', '');
 		ret = ret.replace('<', '');
 		ret = ret.replace('/>', '');
@@ -461,6 +467,7 @@ var jsonifier = (function() {
 		var parsingValue = false;
 		var parsedName = false;
 		var tagName = getTagName(tag);
+		var char = '';
 
 		tag = stripAngleBrackets(tag);
 		
@@ -522,7 +529,7 @@ var jsonifier = (function() {
 		var key = '@' + keyValPair[0];
 		var value = keyValPair[1].substring(1, keyValPair[1].length-1);
 
-		keyValPair = [key, value]
+		keyValPair = [key, value];
 		return keyValPair;
 	}
 
