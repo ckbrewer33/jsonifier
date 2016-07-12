@@ -125,13 +125,17 @@ var jsonifier = (function() {
 	*/
 	function xmlContains(xmlString, value, xpathToValue) {
 		var json = xmlToJSON(xmlString);
-		var splitPath = xpathToValue.split('/');
+		var splitPath = [];
 		var pathStep = '';
 		var tmpObj = {};
 		var regEx = /(\w*\[\@\w*\=\"\w*\"\])/;
 		var attributePath = {};
 		var i = 0;
 
+		if ('/' === xpathToValue.charAt(0)) {
+			xpathToValue = xpathToValue.substring(1);
+		}
+		splitPath = xpathToValue.split('/')
 		tmpObj = json[splitPath[0]];
 		
 		// Traverse the json object

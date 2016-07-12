@@ -40,6 +40,12 @@ describe('Other Methods', function() {
 						'</root>';
 			expect(jsonifier.xmlContains(xml, 'rootValue', 'root/_value')).toBe(true);
 		});
+		it ('should find a value on the root node with a leading slash on the xpath', function() {
+			var xml = '<root>' +
+							'rootValue' +
+						'</root>';
+			expect(jsonifier.xmlContains(xml, 'rootValue', '/root/_value')).toBe(true);
+		});
 		it ('should find an attribute on the root node', function() {
 			var xml = '<root id="rootId">' +
 							'rootValue' +
