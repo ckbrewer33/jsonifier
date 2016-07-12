@@ -25,3 +25,15 @@ input[type="radio"]:focus
 	height: 400px;
 	width: 800px;
 }
+
+.xpathInput {
+	width: 300px;
+}
+
+.labelDiv {
+	width: 35px;
+}
+
+div {
+	margin-bottom: 5px;
+}

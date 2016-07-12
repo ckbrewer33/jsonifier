@@ -14,10 +14,14 @@
 		</div>
 		<div>
 			<button ng-click="convertXML()">Convert XML</button>
+		</div>
+		<hr>
+		<div>
+			<div class="labelDiv"><label>value: </label><input type="text" ng-model="valueToFind"/></div>
+			<div class="labelDiv"><label>path: </label><input class="xpathInput" type="text" ng-model="valuePath"/></div>
 			<button ng-click="findXML()">Value Exists</button>
-			<label>value: </label><input type="text" ng-model="valueToFind"/>
-			<label>path: </label><input type="text" ng-model="valuePath"/> =>
-			<label>{{valueFound}}</label>
+			<button ng-click="getValue()">Get Value</button>
+			<div><label>{{valueFound}}</label></div>
 		</div>
 		<div class="lineOfStuff">
 			{{output}}
