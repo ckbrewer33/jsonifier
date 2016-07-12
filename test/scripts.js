@@ -37,6 +37,8 @@ app.controller('testController', ['$scope', function($scope) {
 		}
 	};
 
-	
+	$scope.clearJSONOutput = function() {
+		$scope.output = '';
+	}
 }]);
 
