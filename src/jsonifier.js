@@ -145,7 +145,7 @@ var jsonifier = (function() {
 			
 			// If an xpath attribute is in the path, find the node that the attribute belongs to
 			if (regEx.test(pathStep)) {
-				attributePath = parseXPathAttribute(pathStep)
+				attributePath = parseXPathAttribute(pathStep);
 				tmpObj = tmpObj[attributePath.tagName];
 
 				if (!Array.isArray(tmpObj)) {
@@ -167,6 +167,15 @@ var jsonifier = (function() {
 		}
 
 		return tmpObj === value;
+	}
+
+	function escapeLTGT(xmlString) {
+		xmlString = xmlString.replace(new RegExp(/&lt;/, 'g'), '<');
+		xmlString = xmlString.replace(new RegExp(/&gt;/, 'g'), '>');
+		xmlString = xmlString.replace(new RegExp(/&amp;/, 'g'), '&');
+		xmlString = xmlString.replace(new RegExp(/apos;/, 'g'), '\'');
+
+		return xmlString;
 	}
 
 
@@ -336,13 +345,14 @@ var jsonifier = (function() {
 		var tokens = [];
 		var tmpToken = '';
 		var char = '';
+		var escapedXMLString = escapeLTGT(xmlString);
 		
-		for (var c = 0; c < xmlString.length; c++) {
-			char = xmlString.charAt(c);
+		for (var c = 0; c < escapedXMLString.length; c++) {
+			char = escapedXMLString.charAt(c);
 
 			// Skip any leading whitespace, tab, and newline characters between nodes
 			while (tmpToken === '' && (' ' === char || '\n' === char || '\t' === char)) {
-				char = xmlString.charAt(++c);
+				char = escapedXMLString.charAt(++c);
 			}
 
 			// If finished reading a value, push it to the token list
@@ -367,12 +377,12 @@ var jsonifier = (function() {
 			// Process comment
 			if (tmpToken === '<!--') {
 				while (true) {
-					char = xmlString.charAt(++c);
+					char = escapedXMLString.charAt(++c);
 					
 					// Check for the end of the comment
 					if ('-' === char) {
-						var next = xmlString.charAt(c+1);
-						var nextnext = xmlString.charAt(c+2);
+						var next = escapedXMLString.charAt(c+1);
+						var nextnext = escapedXMLString.charAt(c+2);
 
 						if (next === '-' && nextnext === '>') {
 							c += 2; // Advance c past the end of the comment (2 for the final 2 characters in '-->')
