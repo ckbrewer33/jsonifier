@@ -203,5 +203,28 @@ describe('Other Methods', function() {
 
 			expect(jsonifier.xmlContains(xml, value, path)).toBe(true);
 		});
+		it ('should find the right value on a non-array node when specifying a path with an attribute', function() {
+			var xml = '<family>' +
+						'<parent>' +
+							'<child id="child1">' +
+								'<toys>' +
+									'<toy id="cat" type="stuffed">Mittens</toy>' +
+								'</toys>' +
+							'</child>' +
+							'<child id="child2">' +
+								'<toys>' +
+									'<toy id="car" type="plastic"></toy>' +
+									'<toy id="truck" type="metal"></toy>' +
+									'<toy id="dog" type="stuffed">Spot</toy>' +
+								'</toys>' +
+							'</child>' +
+						'</parent>' +
+						'<house>4 walls and a door</house>' +
+					'</family>';
+			var value = 'Mittens';
+			var path = '/family/parent/child[@id="child1"]/toys/toy[@id="cat"]/_value';
+			
+			expect(jsonifier.xmlContains(xml, value, path)).toBe(true);
+		});
 	});
 });

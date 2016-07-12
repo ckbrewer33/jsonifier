@@ -153,10 +153,7 @@ var jsonifier = (function() {
 				attributePath = parseXPathAttribute(pathStep);
 				tmpObj = tmpObj[attributePath.tagName];
 
-				if (!Array.isArray(tmpObj)) {
-					tmpObj = tmpObj[attributePath.attributeValue];
-				}
-				else {
+				if (Array.isArray(tmpObj)) {
 					// Loop over the array of node objects until the one with the matching id is found
 					for (var nodeIndex = 0; nodeIndex < tmpObj.length; nodeIndex++) {
 						if (tmpObj[nodeIndex][attributePath.attributeName] === attributePath.attributeValue) {
