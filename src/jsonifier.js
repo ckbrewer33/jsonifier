@@ -8,6 +8,7 @@ var jsonifier = (function() {
 		xmlToJSON: xmlToJSON,
 		validateXML: validateXML,
 		xmlContains: xmlContains,
+		getValue: getValue,
 		
 		// Methods here are only exposed for testing, not intended for api
 		isOpenTag: isOpenTag,
@@ -180,6 +181,65 @@ var jsonifier = (function() {
 		}
 
 		return tmpObj === value;
+	}
+
+	function getValue(xmlString, xpathToValue) {
+		var json = xmlToJSON(xmlString);
+		var splitPath = [];
+		var pathStep = '';
+		var tmpObj = {};
+		var regEx = /(\w*\[\@\w*\=\"\w*\"\])/;
+		var attributePath = {};
+		var i = 0;
+
+		if ('/' === xpathToValue.charAt(0)) {
+			xpathToValue = xpathToValue.substring(1);
+		}
+		splitPath = xpathToValue.split('/')
+		tmpObj = json[splitPath[0]];
+		
+		// Traverse the json object
+		for (i = 1; i < splitPath.length; i++) {
+			
+			// Check to see if the path we have traversed so far is still defined
+			if (!tmpObj) {
+				return false;
+			}
+			
+			pathStep = splitPath[i];
+			
+			// If an xpath attribute is in the path, find the node that the attribute belongs to
+			if (regEx.test(pathStep)) {
+				attributePath = parseXPathAttribute(pathStep);
+				tmpObj = tmpObj[attributePath.tagName];
+
+				if (Array.isArray(tmpObj)) {
+					// Loop over the array of node objects until the one with the matching id is found
+					for (var nodeIndex = 0; nodeIndex < tmpObj.length; nodeIndex++) {
+						if (tmpObj[nodeIndex][attributePath.attributeName] === attributePath.attributeValue) {
+							tmpObj = tmpObj[nodeIndex];
+							break;
+						}
+					}
+				}
+			}
+			// If looking for an id on an array of node objects
+			else if (Array.isArray(tmpObj) && pathStep.indexOf('@') !== -1) {
+				for (var nodeIndex = 0; nodeIndex < tmpObj.length; nodeIndex++) {
+					if (tmpObj[nodeIndex][pathStep]) {
+						if (tmpObj[nodeIndex][pathStep] === value){
+							tmpObj = tmpObj[nodeIndex][pathStep];
+							break;
+						}
+					}
+				}
+			}
+			else {
+				tmpObj = tmpObj[pathStep];
+			}
+		}
+
+		return tmpObj
 	}
 
 	function escapeLTGT(xmlString) {
