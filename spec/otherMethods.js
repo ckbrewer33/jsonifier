@@ -256,6 +256,24 @@ describe('Other Methods', function() {
 
 			expect(jsonifier.getValue(xml, path)).toBe(value);
 		});
+		it ('should return null if the path is invalid', function() {
+			var xml = '<root>' +
+							'<child2>childValue</child2>' +
+						'</root>';
+			var value = 'childValue';
+			var path = 'root/child1/_value';
+
+			expect(jsonifier.getValue(xml, path)).toBe(null);
+		});
+		it ('should return null if there is nothing on that path', function() {
+			var xml = '<root>' +
+				'<child1></child1>' +
+				'</root>';
+			var value = 'childValue';
+			var path = 'root/child1/_value';
+
+			expect(jsonifier.getValue(xml, path)).toBe(null);
+		});
 		it ('should return the attribute on a child node', function() {
 			var xml = '<root>' +
 							'<child1 id="child1">childValue</child1>' +

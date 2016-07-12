@@ -203,7 +203,7 @@ var jsonifier = (function() {
 			
 			// Check to see if the path we have traversed so far is still defined
 			if (!tmpObj) {
-				return false;
+				return null;
 			}
 			
 			pathStep = splitPath[i];
@@ -237,6 +237,10 @@ var jsonifier = (function() {
 			else {
 				tmpObj = tmpObj[pathStep];
 			}
+		}
+
+		if (!tmpObj) {
+			tmpObj = null;
 		}
 
 		return tmpObj
