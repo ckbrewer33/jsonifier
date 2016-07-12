@@ -258,6 +258,31 @@ describe('Non-API Methods', function() {
           ];
           expect(jsonifier.tokenizeXML(test)).toEqual(expected);
         });
+        it('should not remove white space from attribute values', function() {
+          var test = '<root>' +
+                        '<child id="Some id that should still have spaces in it"></child>' +
+                      '</root>';
+          var expected = [
+            '<root>',
+              '<child id="Some id that should still have spaces in it">',
+              '</child>',
+            '</root>'
+          ];
+          expect(jsonifier.tokenizeXML(test)).toEqual(expected);
+        });
+        it('should not remove white space from node values', function() {
+          var test = '<root>' +
+                        '<child>Some value that should still have spaces in it</child>' +
+                      '</root>';
+          var expected = [
+            '<root>',
+              '<child>',
+              'Some value that should still have spaces in it',
+              '</child>',
+            '</root>'
+          ];
+          expect(jsonifier.tokenizeXML(test)).toEqual(expected);
+        });
       });
     });
   });
