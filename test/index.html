@@ -9,8 +9,16 @@
 
 	<div ng-controller="testController" class="stuff">
 		<div>Enter XML String:</div>
-		<div><textarea id="xmlBox" ng-model="xmlTextBox"></textarea></div>
-		<div><button ng-click="convertXML()">Convert XML</button></div>
+		<div>
+			<textarea id="xmlBox" ng-model="xmlTextBox"></textarea>
+		</div>
+		<div>
+			<button ng-click="convertXML()">Convert XML</button>
+			<button ng-click="findXML()">Value Exists</button>
+			<label>value: </label><input type="text" ng-model="valueToFind"/>
+			<label>path: </label><input type="text" ng-model="valuePath"/> =>
+			<label>{{valueFound}}</label>
+		</div>
 		<div class="lineOfStuff">
 			{{output}}
 		</div>
