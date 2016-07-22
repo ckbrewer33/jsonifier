@@ -129,7 +129,7 @@ var jsonifier = (function() {
 		var splitPath = [];
 		var pathStep = '';
 		var tmpObj = {};
-		var regEx = /(\w*\[\@\w*\=\"\w*\"\])/;
+		var regEx = /(\w*\[\@\w*\=\"(\w|\s)*\"\])/;
 		var attributePath = {};
 		var i = 0;
 
@@ -188,7 +188,7 @@ var jsonifier = (function() {
 		var splitPath = [];
 		var pathStep = '';
 		var tmpObj = {};
-		var regEx = /(\w*\[\@\w*\=\"\w*\"\])/;
+		var regEx = /(\w*\[\@\w*\=\"(\w|\s)*\"\])/;
 		var attributePath = {};
 		var i = 0;
 

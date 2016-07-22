@@ -226,6 +226,27 @@ describe('Other Methods', function() {
 
 			expect(jsonifier.xmlContains(xml, value, path)).toBe(true);
 		});
+		it ('should find the right value when an attribute value has a space in it', function() {
+			var xml = 
+				'<root>' +
+					'<child id="id 1">' +
+						'<grandchild>value 1</grandchild>' +
+					'</child>' +
+					'<child id="id 1">' +
+						'<grandchild>value 2</grandchild>' +
+					'</child>' +
+					'<child id="id 3">' +
+						'<grandchild>value 3</grandchild>' +
+					'</child>' +
+					'<child id="id 4">' +
+						'<grandchild>value 4</grandchild>' +
+					'</child>' +
+				'</root>';
+			var value = 'value 1';
+		 	var path = '/root/child[@id="id 1"]/grandchild/_value';
+			
+			expect(jsonifier.xmlContains(xml, value, path)).toBe(true);
+		});
 	});
 	describe('getValue', function() {
 		it ('should return the value on the root node', function() {
@@ -429,5 +450,26 @@ describe('Other Methods', function() {
 
 		 	expect(jsonifier.getValue(xml, path)).toBe(value);
 		 });
+		it ('should return the right value when an attribute value has a space in it', function() {
+			var xml = 
+				'<root>' +
+					'<child id="id 1">' +
+						'<grandchild>value 1</grandchild>' +
+					'</child>' +
+					'<child id="id 1">' +
+						'<grandchild>value 2</grandchild>' +
+					'</child>' +
+					'<child id="id 3">' +
+						'<grandchild>value 3</grandchild>' +
+					'</child>' +
+					'<child id="id 4">' +
+						'<grandchild>value 4</grandchild>' +
+					'</child>' +
+				'</root>';
+			var value = 'value 1';
+		 	var path = '/root/child[@id="id 1"]/grandchild/_value';
+			
+			expect(jsonifier.getValue(xml, path)).toBe(value);
+		});
 	});
 });
