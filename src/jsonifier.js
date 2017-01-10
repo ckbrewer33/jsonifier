@@ -28,7 +28,7 @@ var jsonifier = (function() {
 	}
 
 	/*
-	*	Parses an xml string into a JavaScript object
+	*	Parses an xml string into a JSON object
 	*	@param {String} xmlString - A properly formed xml string
 	*	@return {object} - The xml string represented in a JavaScript object
 	*/
@@ -136,7 +136,7 @@ var jsonifier = (function() {
 		if ('/' === xpathToValue.charAt(0)) {
 			xpathToValue = xpathToValue.substring(1);
 		}
-		splitPath = xpathToValue.split('/')
+		splitPath = xpathToValue.split('/');
 		tmpObj = json[splitPath[0]];
 		
 		// Traverse the json object
@@ -195,7 +195,7 @@ var jsonifier = (function() {
 		if ('/' === xpathToValue.charAt(0)) {
 			xpathToValue = xpathToValue.substring(1);
 		}
-		splitPath = xpathToValue.split('/')
+		splitPath = xpathToValue.split('/');
 		tmpObj = json[splitPath[0]];
 		
 		// Traverse the json object
