@@ -9,5 +9,5 @@ A tool for parsing xml into json without using anything from the browser window
 
 ## Other Notes
 * All pathing to xml nodes should follow xpath rules
-* If you want to get the value of and xml node, use __value_
+* If you want to get the value of and xml node, use _\_value_
   * e.g. getValue(xmlString, '/root/parent/child/_value');
