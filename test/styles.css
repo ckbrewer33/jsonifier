@@ -37,3 +37,7 @@ input[type="radio"]:focus
 div {
 	margin-bottom: 5px;
 }
+
+.errorText {
+	color: red;
+}

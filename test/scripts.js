@@ -15,8 +15,15 @@ app.controller('testController', ['$scope', function($scope) {
 
 	$scope.convertXML = function() {
 		var start = new Date().getTime();
-		
-		$scope.output = jsonifier.xmlToJSON($scope.xmlTextBox);
+		$scope.errorText = null;
+
+		try {
+			$scope.output = jsonifier.xmlToJSON($scope.xmlTextBox);
+		}
+		catch (e)
+		{
+			$scope.errorText = 'Error: ' + e;
+		}
 		
 		var end = new Date().getTime();
 		var time = end-start;
