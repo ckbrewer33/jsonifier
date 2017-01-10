@@ -7,7 +7,7 @@ var jsonifier = (function() {
 		version: getVersion,
 		xmlToJSON: xmlToJSON,
 		validateXML: validateXML,
-		xmlContains: xmlContains,
+		xmlContainsValue: xmlContainsValue,
 		getValue: getValue,
 		
 		// Methods here are only exposed for testing, not intended for api
@@ -124,7 +124,7 @@ var jsonifier = (function() {
 	*	@param {String} xpathToValue - the XPath of where to find the value
 	*	@return {boolean} - Returns true if the value is found on the indicated path, otherwise returns false
 	*/
-	function xmlContains(xmlString, value, xpathToValue) {
+	function xmlContainsValue(xmlString, value, xpathToValue) {
 		var json = xmlToJSON(xmlString);
 		var splitPath = [];
 		var pathStep = '';
@@ -156,12 +156,26 @@ var jsonifier = (function() {
 
 				if (Array.isArray(tmpObj)) {
 					// Loop over the array of node objects until the one with the matching id is found
+					var found = false;
 					for (var nodeIndex = 0; nodeIndex < tmpObj.length; nodeIndex++) {
 						if (tmpObj[nodeIndex][attributePath.attributeName] === attributePath.attributeValue) {
 							tmpObj = tmpObj[nodeIndex];
+							found = true;
 							break;
 						}
 					}
+
+					// If we didn't find the attribute value indicated in the xpath, then the
+					// value doesn't exist so return false
+					if (!found) {
+						return false;
+					}
+				}
+				// If there is only one node object on the path, make sure it has the correct id.  If not, then
+				// the value we're looking for doesn't exist, so return false
+				else if (tmpObj[attributePath.attributeName] !== attributePath.attributeValue)
+				{
+					return false;
 				}
 			}
 			// If looking for an id on an array of node objects
@@ -215,13 +229,28 @@ var jsonifier = (function() {
 
 				if (Array.isArray(tmpObj)) {
 					// Loop over the array of node objects until the one with the matching id is found
+					var found = false;
 					for (var nodeIndex = 0; nodeIndex < tmpObj.length; nodeIndex++) {
 						if (tmpObj[nodeIndex][attributePath.attributeName] === attributePath.attributeValue) {
 							tmpObj = tmpObj[nodeIndex];
+							found = true;
 							break;
 						}
 					}
+
+					// If we didn't find the attribute value indicated in the xpath, then the
+					// value doesn't exist so return null
+					if (!found) {
+						return null;
+					}
 				}
+				// If there is only one node object on the path, make sure it has the correct id.  If not, then
+				// the value we're looking for doesn't exist, so return false
+				else if (tmpObj[attributePath.attributeName] !== attributePath.attributeValue)
+				{
+					return null;
+				}
+
 			}
 			// If looking for an id on an array of node objects
 			else if (Array.isArray(tmpObj) && pathStep.indexOf('@') !== -1) {

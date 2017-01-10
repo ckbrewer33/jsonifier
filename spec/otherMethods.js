@@ -33,24 +33,24 @@ describe('Other Methods', function() {
 		});
 	});
 
-	describe('xmlContains', function() {
+	describe('xmlContainsValue', function() {
 		it ('should find a value on the root node', function() {
 			var xml = '<root>' +
 							'rootValue' +
 						'</root>';
-			expect(jsonifier.xmlContains(xml, 'rootValue', 'root/_value')).toBe(true);
+			expect(jsonifier.xmlContainsValue(xml, 'rootValue', 'root/_value')).toBe(true);
 		});
 		it ('should find a value on the root node with a leading slash on the xpath', function() {
 			var xml = '<root>' +
 							'rootValue' +
 						'</root>';
-			expect(jsonifier.xmlContains(xml, 'rootValue', '/root/_value')).toBe(true);
+			expect(jsonifier.xmlContainsValue(xml, 'rootValue', '/root/_value')).toBe(true);
 		});
 		it ('should find an attribute on the root node', function() {
 			var xml = '<root id="rootId">' +
 							'rootValue' +
 						'</root>';
-			expect(jsonifier.xmlContains(xml, 'rootId', 'root/@id')).toBe(true);
+			expect(jsonifier.xmlContainsValue(xml, 'rootId', 'root/@id')).toBe(true);
 		});
 		it ('should find a value on a child node', function() {
 			var xml = '<root>' +
@@ -59,7 +59,7 @@ describe('Other Methods', function() {
 			var value = 'childValue';
 			var path = 'root/child1/_value';
 
-			expect(jsonifier.xmlContains(xml, value, path)).toBe(true);
+			expect(jsonifier.xmlContainsValue(xml, value, path)).toBe(true);
 		});
 		it ('should find an attribute on a child node', function() {
 			var xml = '<root>' +
@@ -68,7 +68,7 @@ describe('Other Methods', function() {
 			var value = 'child1';
 			var path = 'root/child1/@id';
 
-			expect(jsonifier.xmlContains(xml, value, path)).toBe(true);
+			expect(jsonifier.xmlContainsValue(xml, value, path)).toBe(true);
 		});
 		it ('should find an attribute on a child node when there are multiple children of the same name', function() {
 			var xml = '<root>' +
@@ -78,7 +78,7 @@ describe('Other Methods', function() {
 			var value = 'child2';
 			var path = 'root/child/@id';
 
-			expect(jsonifier.xmlContains(xml, value, path)).toBe(true);
+			expect(jsonifier.xmlContainsValue(xml, value, path)).toBe(true);
 		});
 		it ('should find a value on a grandchild node', function() {
 			var xml = '<root>' +
@@ -89,7 +89,7 @@ describe('Other Methods', function() {
 			var value = 'grandchildValue';
 			var path = 'root/child1/grandchild/_value';
 
-			expect(jsonifier.xmlContains(xml, value, path)).toBe(true);
+			expect(jsonifier.xmlContainsValue(xml, value, path)).toBe(true);
 		});
 		it ('should find an attribute on a grandchild node', function() {
 			var xml = '<root>' +
@@ -100,7 +100,7 @@ describe('Other Methods', function() {
 			var value = 'grandchild1';
 			var path = 'root/child1/grandchild/@id';
 
-			expect(jsonifier.xmlContains(xml, value, path)).toBe(true);
+			expect(jsonifier.xmlContainsValue(xml, value, path)).toBe(true);
 		});
 		it ('should find the right node value when there are multiple children of the same name', function() {
 			var xml = '<root>' +
@@ -110,7 +110,7 @@ describe('Other Methods', function() {
 			var value = 'child1Value';
 			var path = 'root/child[@id="child1"]/_value';
 
-			expect(jsonifier.xmlContains(xml, value, path)).toBe(true);
+			expect(jsonifier.xmlContainsValue(xml, value, path)).toBe(true);
 		});
 		it ('should find the right node value when there are multiple children of the same name and the desired value is not in the first child', function() {
 			var xml = '<root>' +
@@ -120,7 +120,7 @@ describe('Other Methods', function() {
 			var value = 'child2Value';
 			var path = 'root/child[@id="child2"]/_value';
 
-			expect(jsonifier.xmlContains(xml, value, path)).toBe(true);
+			expect(jsonifier.xmlContainsValue(xml, value, path)).toBe(true);
 		});
 		it ('should find the right node attribute when there are multiple children of the same name', function() {
 			var xml = '<root>' +
@@ -130,7 +130,7 @@ describe('Other Methods', function() {
 			var value = 'child1Data';
 			var path = 'root/child[@id="child1"]/@data';
 
-			expect(jsonifier.xmlContains(xml, value, path)).toBe(true);
+			expect(jsonifier.xmlContainsValue(xml, value, path)).toBe(true);
 		});
 		it ('should find the right node attribute when there are multiple children of the same name and the desired attribute is not in the first child', function() {
 			var xml = '<root>' +
@@ -140,7 +140,7 @@ describe('Other Methods', function() {
 			var value = 'child2Data';
 			var path = 'root/child[@id="child2"]/@data';
 
-			expect(jsonifier.xmlContains(xml, value, path)).toBe(true);
+			expect(jsonifier.xmlContainsValue(xml, value, path)).toBe(true);
 		});
 		it ('should find the right grandchild value when there are multiple children of the same name', function() {
 			var xml = '<root>' +
@@ -154,7 +154,7 @@ describe('Other Methods', function() {
 			var value = 'grandchild1Value';
 			var path = 'root/child[@id="child1"]/grandchild/_value';
 
-			expect(jsonifier.xmlContains(xml, value, path)).toBe(true);
+			expect(jsonifier.xmlContainsValue(xml, value, path)).toBe(true);
 		});
 		it ('should find the right grandchild value when there are multiple children of the same name and the desired value is not on the first child', function() {
 			var xml = '<root>' +
@@ -168,7 +168,7 @@ describe('Other Methods', function() {
 			var value = 'grandchild2Value';
 			var path = 'root/child[@id="child2"]/grandchild/_value';
 
-			expect(jsonifier.xmlContains(xml, value, path)).toBe(true);
+			expect(jsonifier.xmlContainsValue(xml, value, path)).toBe(true);
 		});
 		it ('should find the right grandchild value when there are multiple children and grandchildren of the same name and the desired value is not on the first grandchild', function() {
 			var xml = '<root>' +
@@ -184,7 +184,7 @@ describe('Other Methods', function() {
 			var value = 'grandchild4Value';
 			var path = 'root/child[@id="child2"]/grandchild[@id="grandchild4"]/_value';
 
-			expect(jsonifier.xmlContains(xml, value, path)).toBe(true);
+			expect(jsonifier.xmlContainsValue(xml, value, path)).toBe(true);
 		});
 		it ('should find the right grandchild value when there are multiple children and grandchildren of the same name and the granchildren are not in sequential order', function() {
 			var xml = '<root>' +
@@ -201,7 +201,7 @@ describe('Other Methods', function() {
 			var value = 'grandchild5Value';
 			var path = 'root/child[@id="child2"]/grandchild[@id="grandchild5"]/_value';
 
-			expect(jsonifier.xmlContains(xml, value, path)).toBe(true);
+			expect(jsonifier.xmlContainsValue(xml, value, path)).toBe(true);
 		});
 		it ('should find the right value on a non-array node when specifying a path with an attribute', function() {
 			var xml = '<family>' +
@@ -224,7 +224,7 @@ describe('Other Methods', function() {
 			var value = 'Mittens';
 			var path = '/family/parent/child[@id="child1"]/toys/toy[@id="cat"]/_value';
 
-			expect(jsonifier.xmlContains(xml, value, path)).toBe(true);
+			expect(jsonifier.xmlContainsValue(xml, value, path)).toBe(true);
 		});
 		it ('should find the right value when an attribute value has a space in it', function() {
 			var xml = 
@@ -245,7 +245,37 @@ describe('Other Methods', function() {
 			var value = 'value 1';
 		 	var path = '/root/child[@id="id 1"]/grandchild/_value';
 			
-			expect(jsonifier.xmlContains(xml, value, path)).toBe(true);
+			expect(jsonifier.xmlContainsValue(xml, value, path)).toBe(true);
+		});
+		it('should return false when an attribute value of a node object doesn\'t exist with a single child', function(){
+			var xml =
+				'<root>' +
+					'<parent>' +
+						'<child id="child1">' +
+							'<toy id="truck" color="blue" />' +
+						'</child>' +
+					'</parent>' +
+				'</root>';
+			var value = "blue";
+			var path= 'root/parent/child[@id="child1"]/toy[@id="car"]/@color';
+
+			expect(jsonifier.xmlContainsValue(xml, value, path)).toBe(false);
+		});
+		it('should return false when an attribute value of a node object doesn\'t exist with multiple children', function(){
+			var xml =
+				'<root>' +
+					'<parent>' +
+						'<child id="child1">' +
+							'<toy id="truck" color="blue" />' +
+							'<toy id="boat" color="white" />' +
+							'<toy id="airplane" color="silver" />' +
+						'</child>' +
+					'</parent>' +
+				'</root>';
+			var value = "blue";
+			var path= 'root/parent/child[@id="child1"]/toy[@id="car"]/@color';
+
+			expect(jsonifier.xmlContainsValue(xml, value, path)).toBe(false);
 		});
 	});
 	describe('getValue', function() {
@@ -470,6 +500,36 @@ describe('Other Methods', function() {
 		 	var path = '/root/child[@id="id 1"]/grandchild/_value';
 			
 			expect(jsonifier.getValue(xml, path)).toBe(value);
+		});
+		it('should return null when an attribute value of a node object doesn\'t exist with a single child', function(){
+			var xml =
+				'<root>' +
+					'<parent>' +
+						'<child id="child1">' +
+							'<toy id="truck" color="blue" />' +
+						'</child>' +
+					'</parent>' +
+				'</root>';
+			var value = "blue";
+			var path= 'root/parent/child[@id="child1"]/toy[@id="car"]/@color';
+
+			expect(jsonifier.getValue(xml, path)).toBe(null);
+		});
+		it('should return null when an attribute value of a node object doesn\'t exist with multiple children', function(){
+			var xml =
+				'<root>' +
+					'<parent>' +
+						'<child id="child1">' +
+							'<toy id="truck" color="blue" />' +
+							'<toy id="boat" color="white" />' +
+							'<toy id="airplane" color="silver" />' +
+						'</child>' +
+					'</parent>' +
+				'</root>';
+			var value = "blue";
+			var path= 'root/parent/child[@id="child1"]/toy[@id="car"]/@color';
+
+			expect(jsonifier.getValue(xml, path)).toBe(null);
 		});
 	});
 });

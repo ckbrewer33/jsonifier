@@ -30,8 +30,8 @@ app.controller('testController', ['$scope', function($scope) {
 		console.log('execution time: ' + time + 'ms');
 	};
 
-	$scope.findXML = function() {
-		$scope.valueFound = jsonifier.xmlContains($scope.xmlTextBox, $scope.valueToFind, $scope.valuePath);
+	$scope.xmlContainsValue = function() {
+		$scope.valueFound = jsonifier.xmlContainsValue($scope.xmlTextBox, $scope.valueToFind, $scope.valuePath);
 	};
 
 	$scope.getValue = function() {
