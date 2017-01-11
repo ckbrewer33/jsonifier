@@ -9,6 +9,7 @@ var jsonifier = (function() {
 		validateXML: validateXML,
 		xmlContainsValue: xmlContainsValue,
 		getValue: getValue,
+		xmlContainsNode: xmlContainsNode,
 		
 		// Methods here are only exposed for testing, not intended for api
 		isOpenTag: isOpenTag,
@@ -144,6 +145,18 @@ var jsonifier = (function() {
 		return testValue === value;
 	}
 
+	/*
+	 *	Generates a json object from the given xml and traverses it to find the indicated value at the path given and returns the value if found.
+	 *  If nothing is found, then return null.
+	 	*
+	 *	Use '@' to indicate a path to an attribute value: path/to/@attribute
+	 *	Use '_value' to indicate a path to a node value: path/to/_value
+	 *
+	 *	@param {String} xmlString - The xml document to be searched
+	 *	@param {String} value - The value to be searched for
+	 *	@param {String} xpathToValue - the XPath of where to find the value
+	 *	@return {Obj} - Returns the object found at the given xpath, or null if there is nothing there.
+	 */
 	function getValue(xmlString, xpathToValue) {
 		var json = xmlToJSON(xmlString);
 		var splitPath = [];
@@ -213,6 +226,23 @@ var jsonifier = (function() {
 		}
 
 		return tmpObj
+	}
+
+	function xmlContainsNode(xmlString, xPath) {
+		//  If there is a trailing '/' character in the xPath, remove it.
+		if (xPath.lastIndexOf('/') === xPath.length-1) {
+			xPath = xPath.substring(0, xPath.length-1);
+		}
+
+		var testValue = getValue(xmlString, xPath);
+
+		if (testValue) {
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 
 	function escapeLTGT(xmlString) {

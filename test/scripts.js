@@ -37,15 +37,26 @@ app.controller('testController', ['$scope', function($scope) {
 	$scope.getValue = function() {
 		var result = jsonifier.getValue($scope.xmlTextBox, $scope.valuePath);
 		if (null === result) {
-			$scope.valueFound = 'null';
+			$scope.valueFound = '-- no value found at given path --';
 		}
 		else {
 			$scope.valueFound = result;
 		}
 	};
 
+	$scope.xmlContainsNode = function() {
+		var result = jsonifier.xmlContainsNode($scope.xmlTextBox, $scope.valuePath);
+		if (null === result) {
+			$scope.valueFound = '-- no node found at given path --';
+		}
+		else {
+			$scope.valueFound = 'Found a node at ' + $scope.valuePath;
+		}
+	};
+
 	$scope.clearJSONOutput = function() {
 		$scope.output = '';
-	}
+	};
+
 }]);
 
