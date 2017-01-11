@@ -125,76 +125,23 @@ var jsonifier = (function() {
 	*	@return {boolean} - Returns true if the value is found on the indicated path, otherwise returns false
 	*/
 	function xmlContainsValue(xmlString, value, xpathToValue) {
-		var json = xmlToJSON(xmlString);
-		var splitPath = [];
-		var pathStep = '';
-		var tmpObj = {};
-		var regEx = /(\w*\[\@\w*\=\"(\w|\s)*\"\])/;
-		var attributePath = {};
-		var i = 0;
+		var testValue = getValue(xmlString, xpathToValue);
 
-		if ('/' === xpathToValue.charAt(0)) {
-			xpathToValue = xpathToValue.substring(1);
-		}
-		splitPath = xpathToValue.split('/');
-		tmpObj = json[splitPath[0]];
-		
-		// Traverse the json object
-		for (i = 1; i < splitPath.length; i++) {
-			
-			// Check to see if the path we have traversed so far is still defined
-			if (!tmpObj) {
-				return false;
-			}
-			
-			pathStep = splitPath[i];
-			
-			// If an xpath attribute is in the path, find the node that the attribute belongs to
-			if (regEx.test(pathStep)) {
-				attributePath = parseXPathAttribute(pathStep);
-				tmpObj = tmpObj[attributePath.tagName];
+		if (Array.isArray(testValue)) {
+			var splitPath = xpathToValue.split('/');
+			var valueName = splitPath[splitPath.length-1];
 
-				if (Array.isArray(tmpObj)) {
-					// Loop over the array of node objects until the one with the matching id is found
-					var found = false;
-					for (var nodeIndex = 0; nodeIndex < tmpObj.length; nodeIndex++) {
-						if (tmpObj[nodeIndex][attributePath.attributeName] === attributePath.attributeValue) {
-							tmpObj = tmpObj[nodeIndex];
-							found = true;
-							break;
-						}
-					}
-
-					// If we didn't find the attribute value indicated in the xpath, then the
-					// value doesn't exist so return false
-					if (!found) {
-						return false;
-					}
-				}
-				// If there is only one node object on the path, make sure it has the correct id.  If not, then
-				// the value we're looking for doesn't exist, so return false
-				else if (tmpObj[attributePath.attributeName] !== attributePath.attributeValue)
-				{
-					return false;
-				}
-			}
-			// If looking for an id on an array of node objects
-			else if (Array.isArray(tmpObj) && pathStep.indexOf('@') !== -1) {
-				for (var nodeIndex = 0; nodeIndex < tmpObj.length; nodeIndex++) {
-					if (tmpObj[nodeIndex][pathStep]) {
-						if (tmpObj[nodeIndex][pathStep] === value){
-							tmpObj = tmpObj[nodeIndex][pathStep];
-							break;
-						}
+			for (i = 0; i < testValue.length; i++) {
+				if (testValue[i][valueName]) {
+					if (testValue[i][valueName] === value) {
+						return true;
 					}
 				}
 			}
-			else {
-				tmpObj = tmpObj[pathStep];
-			}
+			return false;
 		}
 
-		return tmpObj === value;
+		return testValue === value;
 	}
 
 	function getValue(xmlString, xpathToValue) {
@@ -252,16 +199,9 @@ var jsonifier = (function() {
 				}
 
 			}
-			// If looking for an id on an array of node objects
-			else if (Array.isArray(tmpObj) && pathStep.indexOf('@') !== -1) {
-				for (var nodeIndex = 0; nodeIndex < tmpObj.length; nodeIndex++) {
-					if (tmpObj[nodeIndex][pathStep]) {
-						if (tmpObj[nodeIndex][pathStep] === value){
-							tmpObj = tmpObj[nodeIndex][pathStep];
-							break;
-						}
-					}
-				}
+			// If the xpath doesn't point to a specific attribute value, just return the path up to this point
+			else if (Array.isArray(tmpObj)) {
+				return tmpObj;
 			}
 			else {
 				tmpObj = tmpObj[pathStep];
