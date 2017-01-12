@@ -246,10 +246,15 @@ var jsonifier = (function() {
 	}
 
 	function escapeLTGT(xmlString) {
-		xmlString = xmlString.replace(new RegExp(/&lt;/, 'g'), '<');
-		xmlString = xmlString.replace(new RegExp(/&gt;/, 'g'), '>');
-		xmlString = xmlString.replace(new RegExp(/&amp;/, 'g'), '&');
-		xmlString = xmlString.replace(new RegExp(/apos;/, 'g'), '\'');
+		var lt_regex = /&lt;/;
+		var gt_regex = /&gt;/;
+		var amp_regex = /&amp;/;
+		var apos_regex = /apos;/;
+
+		xmlString = xmlString.replace(lt_regex, '<');
+		xmlString = xmlString.replace(gt_regex, '>');
+		xmlString = xmlString.replace(amp_regex, '&');
+		xmlString = xmlString.replace(apos_regex, '\'');
 
 		return xmlString;
 	}
