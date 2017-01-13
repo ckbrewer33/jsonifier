@@ -38,6 +38,8 @@ var jsonifier = (function() {
 		var currToken = '';
 		var i = 0;
 
+		xmlString = cleanXml(xmlString);
+
 		if (!xmlString || '' ===  xmlString) {
 			return {};
 		}
@@ -166,9 +168,12 @@ var jsonifier = (function() {
 		var attributePath = {};
 		var i = 0;
 
+		// Clean up the expath to remove trailing / and \" characters
 		if ('/' === xpathToValue.charAt(0)) {
 			xpathToValue = xpathToValue.substring(1);
 		}
+		xpathToValue = cleanXml(xpathToValue);
+
 		splitPath = xpathToValue.split('/');
 		tmpObj = json[splitPath[0]];
 		
@@ -646,6 +651,18 @@ var jsonifier = (function() {
 
 	function getScope() {
 		return xmlScope[xmlScope.length-1];
+	}
+
+	function cleanXml(xmlString)
+	{
+		var cleanedXml = xmlString;
+
+		// Remove any double quote escape literals from the xmlString (replaces \" with ")
+		while (cleanedXml.indexOf('\\"') > 0) {
+			cleanedXml = cleanedXml.replace('\\"', '"');
+		}
+
+		return cleanedXml;
 	}
 	
 }).call({});

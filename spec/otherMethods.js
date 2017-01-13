@@ -1,6 +1,3 @@
-/* 
-* Tests for API methods other than xmlToJSON
-*/
 describe('Other Methods', function() {
 	describe('validateXML', function() {
 		it('should yell at you when you pass in javascript with non-matching tags', function() {
@@ -277,6 +274,18 @@ describe('Other Methods', function() {
 
 			expect(jsonifier.xmlContainsValue(xml, value, path)).toBe(false);
 		});
+		it ('should find the correct value when the xpath contains escaped double quote characters', function() {
+			var xml =
+				'<root>' +
+					'<something id="something1">value1</something>' +
+					'<something id="something2">value2</something>' +
+				'</root>';
+
+			var value = "value1";
+			var path = '/root/something[@id=\\"something1\\"]/_value';
+
+			expect(jsonifier.xmlContainsValue(xml, value, path)).toBe(true);
+		});
 	});
 	describe('getValue', function() {
 		it ('should return the value on the root node', function() {
@@ -510,7 +519,7 @@ describe('Other Methods', function() {
 						'</child>' +
 					'</parent>' +
 				'</root>';
-			var value = "blue";
+
 			var path= 'root/parent/child[@id="child1"]/toy[@id="car"]/@color';
 
 			expect(jsonifier.getValue(xml, path)).toBe(null);
@@ -526,10 +535,22 @@ describe('Other Methods', function() {
 						'</child>' +
 					'</parent>' +
 				'</root>';
-			var value = "blue";
+
 			var path= 'root/parent/child[@id="child1"]/toy[@id="car"]/@color';
 
 			expect(jsonifier.getValue(xml, path)).toBe(null);
+		});
+		it ('should return the correct value when the xpath contains escaped double quote characters', function() {
+			var xml =
+				'<root>' +
+					'<something id="something1">value1</something>' +
+					'<something id="something2">value2</something>' +
+				'</root>';
+
+			var value = "value1";
+			var path = '/root/something[@id=\\"something1\\"]/_value';
+
+			expect(jsonifier.getValue(xml, path)).toBe(value);
 		});
 	});
 	describe('xmlContainsNode', function() {
@@ -606,6 +627,41 @@ describe('Other Methods', function() {
 
 			expect(jsonifier.xmlContainsNode(xml, path)).toBe(true);
 		});
+		it ('should find a node when the xpath contains escaped double quote characters', function() {
+			var xml =
+				'<root>' +
+					'<something id="something1">value1</something>' +
+					'<something id="something2">value2</something>' +
+				'</root>';
+
+			var path = '/root/something[@id=\\"something1\\"]/_value';
+
+			expect(jsonifier.xmlContainsNode(xml, path)).toBe(true);
+		});
+	});
+
+	describe('xmlToJSON', function() {
+		it ('should correctly parse an xml string that contains literal escaped double quote characters', function() {
+			var test =
+				'<root>' +
+					'<something id=\\"something1\\">value1</something>' +
+					'<something id=\\"something2\\">value2</something>' +
+				'</root>';
+
+			var expected = {
+				"root": {
+					"something": [{
+						"@id": "something1",
+						"_value": "value1"
+					}, {
+						"@id": "something2",
+						"_value": "value2"
+					}]
+				}
+			};
+
+			expect(jsonifier.xmlToJSON(test)).toEqual(expected);
+		})
 
 	});
 });
