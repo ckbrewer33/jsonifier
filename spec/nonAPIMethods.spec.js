@@ -180,14 +180,14 @@ describe('Non-API Methods', function() {
   describe('createObjectFromTag', function() {
     it ('should make an object with no additional properties or functions from <test>', function() {
       var test = '<test>';
-      var expected = {}
+      var expected = {};
       expect(jsonifier.createObjectFromTag(test)).toEqual(expected);
     });
     it ('should make an object with properties from <test attr1="val1">', function() {
       var test = '<test attr1="val1">';
       var expected = {
           '@attr1': 'val1'
-      }
+      };
       expect(jsonifier.createObjectFromTag(test)).toEqual(expected);
     });
     it ('should make an object with properties from <test attr1="val1" attr2="val2" attr3="val3">', function() {
@@ -196,7 +196,7 @@ describe('Non-API Methods', function() {
           '@attr1': 'val1',
           '@attr2': 'val2',
           '@attr3': 'val3'
-      }
+      };
       expect(jsonifier.createObjectFromTag(test)).toEqual(expected);
     });
     it ('should make an object with no additional properties or functions from <test/>', function() {
@@ -208,7 +208,7 @@ describe('Non-API Methods', function() {
       var test = '<test attr1="val1"/>';
       var expected = {
         '@attr1': 'val1'
-      }
+      };
       expect(jsonifier.createObjectFromTag(test)).toEqual(expected);
     });
     it ('should make an object with properties from <test attr1="val1" attr2="val2" attr3="val3"/>', function() {
@@ -217,7 +217,7 @@ describe('Non-API Methods', function() {
         '@attr1': 'val1',
         '@attr2': 'val2',
         '@attr3': 'val3'
-      }
+      };
       expect(jsonifier.createObjectFromTag(test)).toEqual(expected);
     });
 

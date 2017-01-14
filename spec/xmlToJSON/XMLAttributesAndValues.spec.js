@@ -4,13 +4,13 @@
 describe('XML With Attributes and Values', function() {
 	describe('xmlToJSON', function() {
 		it ('should add the root xml value to the "root" json object property', function() {
-			var test = '<root rootId="rootId">someValue</root>'
+			var test = '<root rootId="rootId">someValue</root>';
 			var expected = {
 				'root': {
 					'@rootId': 'rootId',
 					'_value': 'someValue'
 				}
-			}
+			};
 			expect(jsonifier.xmlToJSON(test)).toEqual(expected);
 		});
 		it ('should add the child xml value and attribute to the child json object property', function() {
@@ -101,7 +101,7 @@ describe('XML With Attributes and Values', function() {
 								'_value': 'grandchildValue'
 							},
 							'@id': 'child2'
-						},
+						}
 					],
 					'@id': 'root'
 				}
