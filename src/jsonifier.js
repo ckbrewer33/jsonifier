@@ -43,7 +43,10 @@ var jsonifier = (function() {
 		if (!xmlString || '' ===  xmlString) {
 			return {};
 		}
-		validateXML(xmlString);  // Will throw an error if the xml is not valid
+
+		if (!validateXML(xmlString)) {
+			throw ("Error - XML is invalid");
+		}
 
 		tokens = tokenizeXML(xmlString);		
 
@@ -82,21 +85,24 @@ var jsonifier = (function() {
 	/*
 	*	Validates an xml string by checking the structure
 	*	@param {String} xmlString - A properly formed xml string
-	*	@return {boolean} - true if the xml string is valid
+	*	@return {Object} - true if the xml string is valid
 	*	@throws
 	*/
 	function validateXML(xmlString) {
 		var tokens = tokenizeXML(xmlString);
 		var currToken = '';
+		var validXML = true;
 		
 		resetGlobalScope();
 
 		// Verify there is not a mix of <> and &lt; &gt; characters
 		if (xmlString.indexOf('<') > -1 && xmlString.indexOf('&lt;') > -1) {
-			throw 'Invalid XML: xml string contains both < and &lt; characters.'
+			console.log('Invalid XML: xml string contains both < and &lt; characters.');
+			return false;
 		}
         if (xmlString.indexOf('>') > -1 && xmlString.indexOf('&gt;') > -1) {
-            throw 'Invalid XML: xml string contains both > and &gt; characters.'
+            console.log('Invalid XML: xml string contains both > and &gt; characters.');
+            return false;
         }
 
 		// Verify that all the tags in the xml are properly closed
@@ -107,7 +113,8 @@ var jsonifier = (function() {
 			}
 			else if (isCloseTag(currToken)) {
 				if (getScope() !== getTagName(currToken)) {
-					throw "Malformed xml string -- " + getScope() + ': missing closing tag';
+					console.log("Malformed xml string -- " + getScope() + ': missing closing tag');
+					return false;
 				}
 				scopeUp();
 			}
@@ -118,13 +125,14 @@ var jsonifier = (function() {
 				// Do nothing, values don't affect scope
 			}
 			else {
-				throw "Invalid token found: " + currToken;
+				console.log("Invalid token found: " + currToken);
+				return false;
 			}
 		}
 
 		resetGlobalScope();
 
-		return true;
+		return validXML;
 	}
 
 	/*
