@@ -2,16 +2,18 @@ var app = angular.module('testApp', []);
 
 app.controller('testController', ['$scope', function($scope) {
 	
-	var xmlText = 	'<MyRoot>'+
-						'<test>Success</test>'+
-						'<test2>'+
-							'<item>val1</item>'+
-							'<item>val2</item>'+
-						'</test2>'+
-						'<test3 id="theId" value="theValue">val3</test3>'+
-						'<test4></test4>'+
-						'<test5/>'+
+	var xmlText = 	'<MyRoot>\n'+
+						'\t<test>Success</test>\n'+
+						'\t<test2>\n'+
+							'\t\t<item>val1</item>\n'+
+							'\t\t<item>val2</item>\n'+
+						'\t</test2>\n'+
+						'\t<test3 id="theId" value="theValue">val3</test3>\n'+
+						'\t<test4></test4>\n'+
+						'\t<test5/>\n'+
 					'</MyRoot>';
+
+	$scope.xmlTextBox = xmlText;
 
 	$scope.convertXML = function() {
 		var start = new Date().getTime();
