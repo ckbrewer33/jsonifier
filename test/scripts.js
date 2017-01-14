@@ -31,10 +31,14 @@ app.controller('testController', ['$scope', function($scope) {
 	};
 
 	$scope.xmlContainsValue = function() {
+		$scope.clearJSONOutput();
+
 		$scope.valueFound = jsonifier.xmlContainsValue($scope.xmlTextBox, $scope.valueToFind, $scope.valuePath);
 	};
 
 	$scope.getValue = function() {
+		$scope.clearJSONOutput();
+
 		var result = jsonifier.getValue($scope.xmlTextBox, $scope.valuePath);
 		if (null === result) {
 			$scope.valueFound = '-- no value found at given path --';
@@ -45,6 +49,8 @@ app.controller('testController', ['$scope', function($scope) {
 	};
 
 	$scope.xmlContainsNode = function() {
+        $scope.clearJSONOutput();
+
 		var result = jsonifier.xmlContainsNode($scope.xmlTextBox, $scope.valuePath);
 		if (null === result) {
 			$scope.valueFound = '-- no node found at given path --';
