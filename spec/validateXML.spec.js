@@ -33,5 +33,24 @@ describe('validateXML', function() {
 
         expect(jsonifier.validateXML(test)).toEqual(true);
     });
+    it ('should yell at you when you pass in an xml string that contains both < and &lt; characters', function() {
+        var test =
+            '<root>' +
+                '&lt;child1>someValue&lt;/child1>' +
+            '</root>';
 
+        expect(function() {
+            jsonifier.validateXML(test);
+        }).toThrow();
+    });
+    it ('should yell at you when you pass in an xml string that contains both > and &gt; characters', function() {
+        var test =
+            '<root>' +
+                '<child1&gt;someValue</child1&gt;' +
+            '</root>';
+
+        expect(function() {
+            jsonifier.validateXML(test);
+        }).toThrow();
+    });
 });

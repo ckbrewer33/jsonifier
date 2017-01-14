@@ -90,6 +90,16 @@ var jsonifier = (function() {
 		var currToken = '';
 		
 		resetGlobalScope();
+
+		// Verify there is not a mix of <> and &lt; &gt; characters
+		if (xmlString.indexOf('<') > -1 && xmlString.indexOf('&lt;') > -1) {
+			throw 'Invalid XML: xml string contains both < and &lt; characters.'
+		}
+        if (xmlString.indexOf('>') > -1 && xmlString.indexOf('&gt;') > -1) {
+            throw 'Invalid XML: xml string contains both > and &gt; characters.'
+        }
+
+		// Verify that all the tags in the xml are properly closed
 		for (var i = 0; i < tokens.length; i++) {
 			currToken = tokens[i];
 			if (isOpenTag(currToken)) {
