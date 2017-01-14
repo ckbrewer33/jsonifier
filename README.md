@@ -1,11 +1,15 @@
 # jsonifier
-A tool for parsing xml into json without using anything from the browser window
+A tool for and extracting values from xml, and parsing xml into json. 
 
 ## API Methods
-* xmlToJson(xmlString) - Parses an xml string into a JavaScript object
-* validateXML(xmlString) - Validates an xml string by checking the structure
-* xmlContains(xmlString, expectedValue, xpathToValue) - Traverses the given xml to find the indicated value at the path given and returns true if found, false if not found
-* getValue(xmlString, xpathToValue) - Traverses the given xml string to find the indicated value at the path given and returns the value if found, otherwise returns null
+Method Name         | Description                                                                       | Return    | Parameters
+------------------- | --------------------------------------------------------------------------------- | ------    | ----------
+xmlToJSON           | Parses an xml string into a JSON object                                           | Object    | String: xmlString
+validateXML         | Validates an xml string by checking the structure, and for escaped < > characters | boolean   | String: xmlString
+xmlContainsValue    | Traverses the given xml to find if the value specified at the given xpath exists  | boolean   | String: xmlString, String: value, String: xpathToValue
+getValue            | Returns the value (if exists) at the given xpath                                  | Object    | String: xmlString, String: xpathToValue
+xmlContainsNode     | Checks the xml to see if there is a node at the given xpath                       | boolean   | String: xmlString, String: xpathToValue
+
 
 ## Other Notes
 * All pathing to xml nodes should follow xpath rules
