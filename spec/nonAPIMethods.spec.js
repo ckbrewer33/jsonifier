@@ -283,6 +283,18 @@ describe('Non-API Methods', function() {
           ];
           expect(jsonifier.tokenizeXML(test)).toEqual(expected);
         });
+        it('should handle escapes < and > characters', function() {
+          var test = '&lt;root&gt;' +
+              '&lt;child&gt;&lt;/child&gt;' +
+              '&lt;/root&gt;';
+          var expected = [
+              '<root>',
+              '<child>',
+              '</child>',
+              '</root>'
+          ];
+          expect(jsonifier.tokenizeXML(test)).toEqual(expected);
+        });
       });
     });
   });

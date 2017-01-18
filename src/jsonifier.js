@@ -268,16 +268,20 @@ var jsonifier = (function() {
 		}
 	}
 
-	function escapeLTGT(xmlString) {
-		var lt_regex = /&lt;/;
-		var gt_regex = /&gt;/;
-		var amp_regex = /&amp;/;
-		var apos_regex = /apos;/;
+	function decodeXML(xmlString) {
+		var escaped_one_to_xml_special_map = {
+			'&amp;': '&',
+			'&quot;': '"',
+			'&lt;': '<',
+			'&gt;': '>',
+			'\\n': '',
+			'\\"': '"'
+		};
 
-		xmlString = xmlString.replace(lt_regex, '<');
-		xmlString = xmlString.replace(gt_regex, '>');
-		xmlString = xmlString.replace(amp_regex, '&');
-		xmlString = xmlString.replace(apos_regex, '\'');
+		xmlString = xmlString.replace(/(&quot;|&lt;|&gt;|&amp;|\\n)/g,
+			function(str, item) {
+				return escaped_one_to_xml_special_map[item];
+			});
 
 		return xmlString;
 	}
@@ -453,7 +457,7 @@ var jsonifier = (function() {
 		var tokens = [];
 		var tmpToken = '';
 		var char = '';
-		var escapedXMLString = escapeLTGT(xmlString);
+		var escapedXMLString = decodeXML(xmlString);
 		
 		for (var c = 0; c < escapedXMLString.length; c++) {
 			char = escapedXMLString.charAt(c);
